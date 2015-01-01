@@ -3,7 +3,8 @@ html
   head
     title= title
     link(href='//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css', rel='stylesheet')
+    block scripts
+      script(src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js")
+      script(src="/javascripts/scraper.js")
   body
     block content
-    block scripts
-      script(type="text/javascript" src="/javascripts/scraper.js")
