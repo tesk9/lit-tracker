@@ -60,7 +60,7 @@ module.exports = function() {
   };
 
   var getRankingsByBook = function(params, callback) {
-    if (params) {
+    if (params.book_id) {
       var queryString = ['SELECT * FROM rankings',
                          'WHERE book_id=$1'].join(" ");
       dbQuery(callback, queryString, [params.book_id]);
@@ -69,20 +69,12 @@ module.exports = function() {
     }
   }
 
-  var getAllRankings = function(callback) {
-    getAllURLs(function(result){
-      result.forEach(function(v) {
-        getRankingsByBook({book_id: v.book_id}, callback);
-      })
-    })
-  }
 
   return {
     addBook : addBook,
     getBookData : getBookData,
     addRanking : addRanking,
     getAllURLs : getAllURLs,
-    getAllRankings : getAllRankings,
     getRankingsByBook : getRankingsByBook
   }
 

@@ -6,5 +6,10 @@ block content
       h1= title
       p Welcome to #{title}
       div.main
-  svg#visualisation(width='1000', height='500')
-
+  div.svgHolder
+  div.container
+    span Add a book to tracking: 
+    input#new-book-name(type='text' placeholder='Title')
+    input#new-book-author(type='text' placeholder='Author')
+    input#new-book-url(type='text' placeholder='Amazon URL')
+    input#submit(type='button' value='Add Book')

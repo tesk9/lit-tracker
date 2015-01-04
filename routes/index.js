@@ -49,7 +49,8 @@ var getCurrentRankings = function() {
   });
 };
 
-setInterval(getCurrentRankings, 8640000);
+setInterval(getCurrentRankings, 86400000);
+// getCurrentRankings();
 
  // GET home page. 
 router.get('/', 
@@ -59,23 +60,22 @@ router.get('/',
   }
 );
 
-router.get('/displays',
+router.get('/urls/:id',
   function(req, res) {
-    // console.log("Headers sent (before all rankings): " + res.headersSent)
-    db.getAllRankings(function(r){
-      // console.log("Headers sent (after all rankings): " + res.headersSent)
-      if(r && res.headersSent === false) {res.send({ rankings: JSON.stringify(r) });}
-      // console.log("Headers sent (after 'send'): " + res.headersSent)
-    });
+    db.getRankingsByBook( {book_id: req.params['id']}, function(r) {
+      res.send({ rankings: JSON.stringify(r) });
+    })
   }
 );
 
-// router.get('/', function(req, res) {
-//   db.getAllRankings(function(r) {
-//     res.render('index', { title: 'LitTracker', 
-//                           rankings: JSON.stringify(r) }
-//               )
-//   })
-// })
+router.get('/urls',
+  function(req, res) {
+    db.getAllURLs(function(books) {
+      res.send({ books: JSON.stringify(books) });
+    })
+  }
+);
+
+
 
 module.exports = router;
