@@ -25,15 +25,23 @@ module.exports = function() {
   };
 
   var addBook = function(params, callback) {
-    var queryString = ['INSERT INTO books(name, author, url)',
-                       'VALUES ($1, $2, $3);'].join(" ");
-    dbQuery(callback, queryString, [params.name, params.author, params.url]);
+    if (params.name && params.author && params.url) {
+      var queryString = ['INSERT INTO books(name, author, url)',
+                         'VALUES ($1, $2, $3);'].join(" ");
+      dbQuery(callback, queryString, [params.name, params.author, params.url]);
+    } else {
+      console.log('database does not accept empty values for book name, author, or url');
+    }
   };
 
   var getBookData = function(params, callback) {
-    var queryString = ['SELECT * FROM rankings',
-                       'WHERE book_id=$1;'].join(" ");
-    dbQuery(callback, queryString, [params.book_id]);
+    if (params.book_id) {
+      var queryString = ['SELECT * FROM rankings',
+                         'WHERE book_id=$1;'].join(" ");
+      dbQuery(callback, queryString, [params.book_id]);
+    } else {
+      console.log('desired book_id must be specified');
+    }
   };
 
   var getAllURLs = function(callback) {
@@ -42,16 +50,40 @@ module.exports = function() {
   }
 
   var addRanking = function(params, callback) {
-    var queryString = ['INSERT INTO rankings(book_id, ranking, date)',
+    if (params.book_id && params.ranking && params.date) {
+      var queryString = ['INSERT INTO rankings(book_id, ranking, date)',
                        'VALUES ($1, $2, $3);'].join(" ");
-    dbQuery(callback, queryString, [params.book_id, params.ranking, params.date]);
+      dbQuery(callback, queryString, [params.book_id, params.ranking, params.date]);
+    } else {
+      console.log('database does not accept empty values for book id, book ranking, or date');
+    }
   };
+
+  var getRankingsByBook = function(params, callback) {
+    if (params) {
+      var queryString = ['SELECT * FROM rankings',
+                         'WHERE book_id=$1'].join(" ");
+      dbQuery(callback, queryString, [params.book_id]);
+    } else {
+      console.log('error in bookRankings.js');
+    }
+  }
+
+  var getAllRankings = function(callback) {
+    getAllURLs(function(result){
+      result.forEach(function(v) {
+        getRankingsByBook({book_id: v.book_id}, callback);
+      })
+    })
+  }
 
   return {
     addBook : addBook,
     getBookData : getBookData,
     addRanking : addRanking,
-    getAllURLs : getAllURLs
+    getAllURLs : getAllURLs,
+    getAllRankings : getAllRankings,
+    getRankingsByBook : getRankingsByBook
   }
 
 }();

@@ -6,7 +6,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var jade = require('jade');
 var routes = require('./routes/index');
-var users = require('./routes/users');
 
 var app = express();
 
@@ -20,17 +19,27 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.use('/users', users);
+app.use(express.static(__dirname + '/public'));
+
+app.disable('etag');
+
+app.get('/*', function(req, res, next) {
+  res.setHeader('Last-Modified', (new Date()).toUTCString());
+  next();
+});
+
+// app.use(express.static(path.join(__dirname, 'public')));
+
+// app.use('/', routes);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
-});
+// app.use(function(req, res, next) {
+//     var err = new Error('Not Found');
+//     err.status = 404;
+//     next(err);
+// });
 
 // error handlers
 
@@ -56,16 +65,12 @@ app.use(function(err, req, res, next) {
     });
 });
 
-app.get('/', function (req, res) {
-  res.send('Hello World!')
-})
-
 var server = app.listen(3000, function () {
 
   var host = server.address().address
   var port = server.address().port
 
-  console.log('Book tracker app listening at http://%s:%s', host, port)
+  console.log('LitTracker listening at http://%s:%s', host, port)
 
 })
 
