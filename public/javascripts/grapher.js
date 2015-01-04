@@ -26,14 +26,15 @@ var InitLineChart = function(lineData, book_id) {
         .orient('left')
         .tickSubdivide(true);
 
-        console.log(xAxisData.map(function(v) {return Date(v)}))
-        console.log((xAxisData[0]));
-        console.log((xAxisData[xAxisData.length-1]));
-   
   vis.append('svg:g')
     .attr('class', 'x axis')
     .attr('transform', 'translate(0,' + (HEIGHT - MARGINS.bottom) + ')')
     .call(xAxis);
+
+  vis.append('text')
+    .attr("transform", "translate(" + WIDTH/2 + " ," + (HEIGHT + MARGINS.bottom) + ")")
+    .style("text-anchor", "middle")
+    .text("Date");
    
   vis.append('svg:g')
     .attr('class', 'y axis')

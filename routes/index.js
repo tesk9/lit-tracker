@@ -49,7 +49,7 @@ var getCurrentRankings = function() {
   });
 };
 
-setInterval(getCurrentRankings, 86400000);
+setInterval(getCurrentRankings, 864000);
 // getCurrentRankings();
 
  // GET home page. 
@@ -76,6 +76,12 @@ router.get('/urls',
   }
 );
 
+router.post('/new',
+  function(req, res) {
+    db.addBook({name: req.body.name, author: req.body.author, url: req.body.url});
+    res.redirect('/');
+  }
+);
 
 
 module.exports = router;
