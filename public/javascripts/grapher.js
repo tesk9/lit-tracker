@@ -1,45 +1,70 @@
 var InitLineChart = function(lineData, book_id) {
-  var vis = d3.select('#visualization'+book_id),
-      WIDTH = 1000,
-      HEIGHT = 500,
-      MARGINS = {
+  var MARGINS = {
         top: 20,
         right: 20,
-        bottom: 20,
+        bottom: 40,
         left: 100
-      },
-      xAxisData = lineData.map(function(v,i,a) { return Date.parse(v.date); }),
-      xRange = d3.time.scale().range([MARGINS.left, WIDTH - MARGINS.right]).domain([xAxisData[0], xAxisData[xAxisData.length-1]]),
-      yRange = d3.scale.linear().range([MARGINS.bottom, HEIGHT - MARGINS.top]).domain([d3.min(lineData, function(d) {
-        return d.ranking;
-      }), d3.max(lineData, function(d) {
-        return d.ranking;
-      })]),
-      xAxis = d3.svg.axis()
-        .scale(xRange)
-        .tickSize(1)
-        .orient('bottom')
-        .tickSubdivide(true),
-      yAxis = d3.svg.axis()
-        .scale(yRange)
-        .tickSize(1)
-        .orient('left')
-        .tickSubdivide(true);
+      }
+  WIDTH = 1000 - MARGINS.left - MARGINS.right, 
+  HEIGHT = 500 - MARGINS.top - MARGINS.bottom,
+  
+  // select DOM element and append svg element
+  vis = d3.select('#visualization'+book_id)
+    .append("svg")
+      .attr("width", WIDTH + MARGINS.left + MARGINS.right)
+      .attr("height", HEIGHT + MARGINS.top + MARGINS.bottom)
+    .append("g")
+      .attr("transform", "translate(" + MARGINS.left + "," + MARGINS.top + ")"),
 
-  vis.append('svg:g')
+  // get all dates in data set
+  xAxisData = lineData.map(function(v,i,a) { return Date.parse(v.date); }),
+  
+  // define data ranges with .scale
+  xRange = d3.time.scale().range([0, WIDTH]).domain([xAxisData[0], xAxisData[xAxisData.length-1]]),
+  yRange = d3.scale.linear().range([0, HEIGHT]).domain([d3.min(lineData, function(d) {
+    return d.ranking;
+  }), d3.max(lineData, function(d) {
+    return d.ranking;
+  })]),
+
+  // define axes
+  xAxis = d3.svg.axis()
+    .scale(xRange)
+    .tickSize(1)
+    .orient('bottom')
+    .tickSubdivide(true),
+  yAxis = d3.svg.axis()
+    .scale(yRange)
+    .tickSize(1)
+    .orient('left')
+    .tickSubdivide(true);
+
+  // append x-axis
+  vis.append('g')
     .attr('class', 'x axis')
-    .attr('transform', 'translate(0,' + (HEIGHT - MARGINS.bottom) + ')')
+    .attr('transform', 'translate(0,' + HEIGHT+ ')')
     .call(xAxis);
 
+  // append x label
   vis.append('text')
-    .attr("transform", "translate(" + WIDTH/2 + " ," + (HEIGHT + MARGINS.bottom) + ")")
+    .attr("x", WIDTH / 2 )
+    .attr("y",  HEIGHT + MARGINS.bottom )    
     .style("text-anchor", "middle")
     .text("Date");
    
-  vis.append('svg:g')
+  // append y-xis
+  vis.append('g')
     .attr('class', 'y axis')
-    .attr('transform', 'translate(' + (MARGINS.left) + ',0)')
     .call(yAxis);
+
+  // append y abel
+  vis.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("x", 0 - (HEIGHT / 2))
+    .attr("y", 0 - 4 * MARGINS.left / 5)
+    .attr("dy", "1em")
+    .style("text-anchor", "middle")
+    .text("Amazon Sales Ranking");
 
   var lineFunc = d3.svg.line()
     .x(function(d) {
