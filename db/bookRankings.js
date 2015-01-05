@@ -30,7 +30,7 @@ module.exports = function() {
                        'name text',
                        'author text',
                        'url text',
-                       ');'].join(" ");
+                       ');'].join(", ");
     dbQuery(callback, queryString, []);
   }
 
@@ -39,7 +39,7 @@ module.exports = function() {
                        'ranking_id SERIAL PRIMARY KEY',
                        'book_id integer REFERENCES books(book_id)',
                        'date date',
-                        ');'].join(" ")
+                        ');'].join(", ")
     dbQuery(callback, queryString, []);
   }
 
