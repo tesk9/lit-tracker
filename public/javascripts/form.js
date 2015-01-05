@@ -32,8 +32,12 @@ var addBook = function() {
             author: $auth,
             url: $url
           },
-    success: function() {
-      window.location = '/';
+    success: function(r) {
+      var data = JSON.parse(r.rankings);
+      $("#formHolder").prepend("<p>"+data.name+" by "+data.author+" has been added.</p>")
+      $("#new-book-name").val("");
+      $("#new-book-author").val("");
+      $("#new-book-url").val("");
     }
     });
 

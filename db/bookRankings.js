@@ -46,7 +46,8 @@ module.exports = function() {
   var addBook = function(params, callback) {
     if (params.name && params.author && params.url) {
       var queryString = ['INSERT INTO books(name, author, url)',
-                         'VALUES ($1, $2, $3);'].join(" ");
+                         'VALUES ($1, $2, $3)',
+                         'RETURNING *;'].join(" ");
       dbQuery(callback, queryString, [params.name, params.author, params.url]);
     } else {
       console.log('database does not accept empty values for book name, author, or url');

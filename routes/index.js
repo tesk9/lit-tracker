@@ -32,22 +32,26 @@ var getCurrentRankings = function() {
     var books = result;  
     books.forEach(function(v) {
       download(v.url, function(data) {
-        if (data) {
-          var $data = $($.parseHTML(data));
-          var sales = $data.find("#SalesRank").text();
-          var start = sales.indexOf("#") + 1;
-          sales = sales.slice(start);
-          var end = sales.indexOf(" ");
-          sales = sales.slice(0, end);
-          sales = cleanUpInt(sales);
-          console.log("Sales ranking for " + v.name + ": " + sales);
-          var time = new Date();
-          db.addRanking({book_id: v.book_id, ranking: sales, date: time});
-        }
-      }
-    )});
+        scrape(v, data);
+      });
+    });
   });
 };
+
+var scrape = function(book, data) {
+  if (data) {
+    var $data = $($.parseHTML(data));
+    var sales = $data.find("#SalesRank").text();
+    var start = sales.indexOf("#") + 1;
+    sales = sales.slice(start);
+    var end = sales.indexOf(" ");
+    sales = sales.slice(0, end);
+    sales = cleanUpInt(sales);
+    console.log("Sales ranking for " + book.name + ": " + sales);
+    var time = new Date();
+    db.addRanking({book_id: book.book_id, ranking: sales, date: time});
+  }
+}
 
 setInterval(getCurrentRankings, 86400000);
 // getCurrentRankings();
@@ -81,8 +85,12 @@ router.get('/urls',
 // POST a new book to track
 router.post('/new',
   function(req, res) {
-    db.addBook({name: req.body.name, author: req.body.author, url: req.body.url}, function() {
-      res.status(200).send();
+    db.addBook({name: req.body.name, author: req.body.author, url: req.body.url}, function(r) {
+      console.log(r);
+      download(r[0].url, function(data) {
+        scrape(r[0], data);
+      });
+      res.send({ rankings: JSON.stringify(r[0]) });
     });
   }
 );
