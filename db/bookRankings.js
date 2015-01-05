@@ -26,20 +26,20 @@ module.exports = function() {
 
   var createBooks = function(callback) {
     var queryString = ['CREATE TABLE IF NOT EXISTS books(',
-                       'book_id SERIAL PRIMARY KEY',
-                       'name text',
-                       'author text',
+                       'book_id SERIAL PRIMARY KEY,',
+                       'name text,',
+                       'author text,',
                        'url text',
-                       ');'].join(", ");
+                       ');'].join(" ");
     dbQuery(callback, queryString, []);
   }
 
   var createRankings = function(callback) {
     var queryString = ['CREATE TABLE IF NOT EXISTS rankings(',
-                       'ranking_id SERIAL PRIMARY KEY',
-                       'book_id integer REFERENCES books(book_id)',
+                       'ranking_id SERIAL PRIMARY KEY,',
+                       'book_id integer REFERENCES books(book_id),',
                        'date date',
-                        ');'].join(", ")
+                        ');'].join(" ")
     dbQuery(callback, queryString, []);
   }
 
