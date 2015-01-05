@@ -1,6 +1,6 @@
 var InitLineChart = function(lineData, book_id) {
   var MARGINS = {
-        top: 20,
+        top: 30,
         right: 20,
         bottom: 40,
         left: 100
@@ -57,14 +57,23 @@ var InitLineChart = function(lineData, book_id) {
     .attr('class', 'y axis')
     .call(yAxis);
 
-  // append y abel
+  // append y label
   vis.append("text")
     .attr("transform", "rotate(-90)")
     .attr("x", 0 - (HEIGHT / 2))
     .attr("y", 0 - 4 * MARGINS.left / 5)
     .attr("dy", "1em")
     .style("text-anchor", "middle")
-    .text("Amazon Sales Ranking");
+    .text("Sales Ranking");
+
+  // append title
+  vis.append("text")
+    .attr("x", (WIDTH / 2))             
+    .attr("y", 0 - (MARGINS.top / 2))
+    .attr("text-anchor", "middle")  
+    .style("font-size", "16px") 
+    .style("text-decoration", "underline")  
+    .text("Amazon Sales Ranking versus Date");
 
   var lineFunc = d3.svg.line()
     .x(function(d) {
