@@ -38,6 +38,7 @@ module.exports = function() {
     var queryString = ['CREATE TABLE IF NOT EXISTS rankings(',
                        'ranking_id SERIAL PRIMARY KEY,',
                        'book_id integer REFERENCES books(book_id),',
+                       'ranking integer,',
                        'date date',
                         ');'].join(" ")
     dbQuery(callback, queryString, []);
