@@ -10,6 +10,9 @@ var InitLineChart = function(lineData, book_id) {
   
   // select DOM element and append svg element
   vis = d3.select('#visualization'+book_id)
+    .append("div")
+      .style("width", WIDTH + MARGINS.left + MARGINS.right + 70 + "px")
+      .style("margin", "0px auto")
     .append("svg")
       .attr("width", WIDTH + MARGINS.left + MARGINS.right)
       .attr("height", HEIGHT + MARGINS.top + MARGINS.bottom)
@@ -94,7 +97,7 @@ var InitLineChart = function(lineData, book_id) {
 $.get('/urls', function(books) {
   var books = JSON.parse(books.books);
   books.forEach(function(v,i,a) {
-    $(".svgHolder").append("<div class='container'><div class='starter-template'><h2>"+v.name+"</h2><h3><em>by </em>"+v.author+"</h3></div></div><svg id='visualization"+String(v.book_id)+"' width='1000' height='500'></svg><br><hr><br>")
+    $(".svgHolder").append("<div class='container'><div class='text-center'><h3><em><strong>"+v.name+"</strong></em> by "+v.author+"</h3></div></div><div id='visualization"+String(v.book_id)+"'></div><br><hr><br>")
     $.get('/urls/' + v.book_id, function(data) {
       var data = JSON.parse(data.rankings);
       InitLineChart(data, v.book_id);

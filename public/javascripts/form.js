@@ -34,5 +34,5 @@ var addBook = function() {
 
 var errMessage = function(err) {
   $("#formHolder").find("span").remove();
-  $("#formHolder").append("<span class='form-err'>"+err+"</span>");
+  $("#formHolder").append("<span class='text-error'>"+err+"</span>");
 };
