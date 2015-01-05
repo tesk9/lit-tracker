@@ -88,6 +88,9 @@ module.exports = function() {
     }
   }
 
+  createBooks();
+  createRankings();
+
 
   return {
     addBook : addBook,
