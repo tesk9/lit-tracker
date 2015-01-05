@@ -28,8 +28,8 @@ module.exports = function() {
     var queryString = ['CREATE TABLE IF NOT EXISTS books(',
                        'book_id SERIAL PRIMARY KEY',
                        'name text',
-                       'author',
-                       'url',
+                       'author text',
+                       'url text',
                        ');'].join(" ");
     dbQuery(callback, queryString, []);
   }
