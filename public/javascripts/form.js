@@ -1,4 +1,6 @@
 $(document).ready(function() {
+
+  // new-book form submit:
   $("#submit").on('click', function(e) {
     addBook();
   });
@@ -7,8 +9,10 @@ $(document).ready(function() {
       addBook();
     }
   })
+
 })
 
+// verify data existence/types and POST data to server
 var addBook = function() {
   var $title = $("#new-book-name").val(),
       $auth = $("#new-book-author").val(),
@@ -33,6 +37,6 @@ var addBook = function() {
 };
 
 var errMessage = function(err) {
-  $("#formHolder").find("span").remove();
-  $("#formHolder").append("<span class='text-error'>"+err+"</span>");
+  $("#formHolder").find("span:nth-of-type(2)").remove();
+  $("#formHolder").append("<span class='text-error'> "+err+"</span>");
 };

@@ -4,13 +4,12 @@ var http = require('http');
 var $ = require('jquery')(require('jsdom').jsdom().parentWindow);
 var db = require('../db/bookRankings.js');
 
-//db.addBook({name: "Yes Please", author: "Amy Poehler", url: "http://www.amazon.com/Yes-Please-Amy-Poehler/dp/0062268341/ref=tmm_hrd_swatch_0?_encoding=UTF8&sr=1-1&qid=1419636038"}, function(result) {console.log("Book Added.")});
-// db.addBook({name: "The Giving Tree", author: "Shel Silverstein", url: "http://www.amazon.com/Giving-Tree-Shel-Silverstein-ebook/dp/B00DB2QZPI/ref=sr_1_1?s=digital-text&ie=UTF8&qid=1420330728&sr=1-1&keywords=the+giving+tree"}, function(result) {console.log("Book Added.")});
-
+// Standardize number format
 var cleanUpInt = function(numStr) {
   return numStr.replace(/\,/g, '');
 };
 
+// Helper function for scraper
 var download = function(url, callback) {
   http.get(url, function(res) {
   console.log("Got response: " + res.statusCode);
@@ -27,6 +26,7 @@ var download = function(url, callback) {
   });
 };
 
+// Amazon Scraper
 var getCurrentRankings = function() {
   db.getAllURLs(function(result) {
     var books = result;  
@@ -49,7 +49,7 @@ var getCurrentRankings = function() {
   });
 };
 
-setInterval(getCurrentRankings, 864000);
+setInterval(getCurrentRankings, 86400000);
 // getCurrentRankings();
 
  // GET home page. 
@@ -60,6 +60,7 @@ router.get('/',
   }
 );
 
+ // GET all rankings for specified book
 router.get('/urls/:id',
   function(req, res) {
     db.getRankingsByBook( {book_id: req.params['id']}, function(r) {
@@ -68,6 +69,7 @@ router.get('/urls/:id',
   }
 );
 
+// GET all tracked books
 router.get('/urls',
   function(req, res) {
     db.getAllURLs(function(books) {
@@ -76,6 +78,7 @@ router.get('/urls',
   }
 );
 
+// POST a new book to track
 router.post('/new',
   function(req, res) {
     db.addBook({name: req.body.name, author: req.body.author, url: req.body.url});
