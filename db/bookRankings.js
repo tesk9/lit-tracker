@@ -1,6 +1,6 @@
 module.exports = function() {
   var pg = require('pg');
-  var conString = "postgres://tessakelly:1234@localhost/lit-tracker-db";
+  var conString = process.env.DATABASE_URL || "postgres://tessakelly:1234@localhost/lit-tracker-db";
 
   var dbQuery = function(callback, queryString, array) {
     pg.connect(conString, function(err, client, done) {
@@ -23,6 +23,25 @@ module.exports = function() {
       })
     })  
   };
+
+  var createBooks = function() {
+    var queryString = ['CREATE TABLE IF NOT EXISTS books(',
+                       'book_id SERIAL PRIMARY KEY',
+                       'name text',
+                       'author',
+                       'url',
+                       ');'].join(" ");
+    dbQuery(callback, queryString, []);
+  }
+
+  var createRankings = function() {
+    var queryString = ['CREATE TABLE IF NOT EXISTS rankings(',
+                       'ranking_id SERIAL PRIMARY KEY',
+                       'book_id integer REFERENCES books(book_id)',
+                       'date date',
+                        ');'].join(" ")
+    dbQuery(callback, queryString, []);
+  }
 
   var addBook = function(params, callback) {
     if (params.name && params.author && params.url) {
