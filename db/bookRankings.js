@@ -24,7 +24,7 @@ module.exports = function() {
     })  
   };
 
-  var createBooks = function() {
+  var createBooks = function(callback) {
     var queryString = ['CREATE TABLE IF NOT EXISTS books(',
                        'book_id SERIAL PRIMARY KEY',
                        'name text',
@@ -34,7 +34,7 @@ module.exports = function() {
     dbQuery(callback, queryString, []);
   }
 
-  var createRankings = function() {
+  var createRankings = function(callback) {
     var queryString = ['CREATE TABLE IF NOT EXISTS rankings(',
                        'ranking_id SERIAL PRIMARY KEY',
                        'book_id integer REFERENCES books(book_id)',
@@ -88,8 +88,8 @@ module.exports = function() {
     }
   }
 
-  createBooks();
-  createRankings();
+  createBooks(function() {console.log("Table books created/exists");});
+  createRankings(function() {console.log("Table rankings created/exists")});
 
 
   return {
