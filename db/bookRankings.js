@@ -88,9 +88,8 @@ module.exports = function() {
     }
   }
 
-  createBooks(function() {console.log("Table books created/exists");});
-  createRankings(function() {console.log("Table rankings created/exists")});
-
+  createBooks();
+  createRankings();
 
   return {
     addBook : addBook,
