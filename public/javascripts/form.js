@@ -31,7 +31,10 @@ var addBook = function() {
     data: { name: $title,
             author: $auth,
             url: $url
-          }
+          },
+    success: function() {
+      window.location = '/';
+    }
     });
 
 };

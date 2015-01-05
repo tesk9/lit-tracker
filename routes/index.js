@@ -81,8 +81,9 @@ router.get('/urls',
 // POST a new book to track
 router.post('/new',
   function(req, res) {
-    db.addBook({name: req.body.name, author: req.body.author, url: req.body.url});
-    res.redirect('/');
+    db.addBook({name: req.body.name, author: req.body.author, url: req.body.url}, function() {
+      res.status(200).send();
+    });
   }
 );
 
