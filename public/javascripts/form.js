@@ -25,21 +25,23 @@ var addBook = function() {
     return;
   }
 
-  $.ajax({
-    url: '/new',
-    type: 'POST',
-    data: { name: $title,
-            author: $auth,
-            url: $url
-          },
-    success: function(r) {
-      var data = JSON.parse(r.rankings);
-      $("#formHolder").prepend("<p>"+data.name+" by "+data.author+" has been added.</p>")
-      $("#new-book-name").val("");
-      $("#new-book-author").val("");
-      $("#new-book-url").val("");
-    }
-    });
+  errMessage("Adding books disabled. Please try again later.")
+
+  // $.ajax({
+  //   url: '/new',
+  //   type: 'POST',
+  //   data: { name: $title,
+  //           author: $auth,
+  //           url: $url
+  //         },
+  //   success: function(r) {
+  //     var data = JSON.parse(r.rankings);
+  //     $("#formHolder").prepend("<p>"+data.name+" by "+data.author+" has been added.</p>")
+  //     $("#new-book-name").val("");
+  //     $("#new-book-author").val("");
+  //     $("#new-book-url").val("");
+  //   }
+  //   });
 
 };
 
