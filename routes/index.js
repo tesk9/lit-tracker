@@ -83,17 +83,17 @@ router.get('/urls',
 );
 
 // POST a new book to track
-router.post('/new',
-  function(req, res) {
-    db.addBook({name: req.body.name, author: req.body.author, url: req.body.url}, function(r) {
-      console.log(r);
-      download(r[0].url, function(data) {
-        scrape(r[0], data);
-      });
-      res.send({ rankings: JSON.stringify(r[0]) });
-    });
-  }
-);
+// router.post('/new',
+//   function(req, res) {
+//     db.addBook({name: req.body.name, author: req.body.author, url: req.body.url}, function(r) {
+//       console.log(r);
+//       download(r[0].url, function(data) {
+//         scrape(r[0], data);
+//       });
+//       res.send({ rankings: JSON.stringify(r[0]) });
+//     });
+//   }
+// );
 
 
 module.exports = router;
