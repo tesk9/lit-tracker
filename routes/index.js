@@ -30,15 +30,19 @@ var download = function(url, callback) {
 var getCurrentRankings = function() {
   db.getAllBooks(function(result) {
     var books = result;  
-    books.forEach(function(v) {
-      download(v.url, function(data) {
-        scrape(v, data);
-      });
+    books.forEach(function(book) {
+      db.getBookURLs({ book_id: book.book_id }, function(urls) {
+        urls.forEach(function(v) {
+          download(v.url, function(data) {
+            scrape(v, data);
+          });
+        })
+      })
     });
   });
 };
 
-var scrape = function(book, data) {
+var scrape = function(url, data) {
   if (data) {
     var $data = $($.parseHTML(data));
     var sales = $data.find("#SalesRank").text();
@@ -47,13 +51,13 @@ var scrape = function(book, data) {
     var end = sales.indexOf(" ");
     sales = sales.slice(0, end);
     sales = cleanUpInt(sales);
-    console.log("Sales ranking for " + book.name + ": " + sales);
+    console.log("Sales ranking for url_id " + url.url_id + ": " + sales);
     var time = new Date();
-    db.addRanking({book_id: book.book_id, ranking: sales, date: time});
+    db.addRanking({url_id: url.url_id, ranking: sales, date: time});
   }
 }
 
-// setInterval(getCurrentRankings, 200000);
+// setInterval(getCurrentRankings, 1005);
 // getCurrentRankings();
 
  // GET home page. 

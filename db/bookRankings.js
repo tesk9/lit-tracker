@@ -88,7 +88,7 @@ module.exports = function() {
   }
 
   var addRanking = function(params, callback) {
-    if (params.book_id && params.ranking && params.date) {
+    if (params.url_id && params.ranking && params.date) {
       var queryString = ['INSERT INTO rankings(url_id, ranking, date)',
                        'VALUES ($1, $2, $3);'].join(" ");
       dbQuery(callback, queryString, [params.url_id, params.ranking, params.date]);
