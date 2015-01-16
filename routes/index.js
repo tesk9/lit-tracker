@@ -90,7 +90,7 @@ router.get('/',
 router.get('/books/:id',
   function(req, res) {
     db.getRankingsByBook({book_id: req.params['id']}, function(rankings) {
-        res.send({ rankings: JSON.stringify(rankings) });
+      res.send({ rankings: JSON.stringify(rankings) });
     })
   }
 );

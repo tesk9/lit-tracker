@@ -1,12 +1,31 @@
 var Grapher = (function() {
   var process = function(data) {
+    var y = {};
+    var urlHolder = [];
     data.forEach(function(v) {
-      console.log(v);
+      if(y[v.url_id] !== undefined) {
+        y[v.url_id].push({date: v.date, ranking: v.ranking});
+      } else {
+        y[v.url_id] = [{date: v.date, ranking: v.ranking}];
+        urlHolder.push(v.url_id)
+      }
     })
+    var yArr = [];
+    urlHolder.forEach(function(url_id) {
+      yArr.push(y[url_id]);
+    })
+    return yArr;
   }
 
   var InitLineChart = function(lineData, book_id) {
-    process(lineData);
+    var yData = process(lineData);
+    var colors = [
+      'steelblue',
+      'green',
+      'red',
+      'purple'
+    ]
+
     var MARGINS = {
           top: 30,
           right: 20,
@@ -86,21 +105,29 @@ var Grapher = (function() {
       .style("text-decoration", "underline")  
       .text("Amazon Sales Ranking versus Date");
 
-    var lineFunc = d3.svg.line()
-      .x(function(d) {
-        return xRange(Date.parse(d.date));
-      })
-      .y(function(d) {
-        return yRange(d.ranking);
-      })
-      .interpolate('linear');
+  
+    var appendLine = function(inputData, i) {
+      var lineFunc = d3.svg.line()
+        .x(function(d) {
+          return xRange(Date.parse(d.date));
+        })
+        .y(function(d) {
+          return yRange(d.ranking);
+        })
+        .interpolate('linear');
 
-    vis.append('svg:path')
-      .attr('d', lineFunc(lineData))
-      .attr('stroke', 'blue')
-      .attr('stroke-width', 2)
-      .attr('fill', 'none');
+      vis.append('svg:path')
+        .attr('d', lineFunc(inputData))
+        .attr('stroke', colors[i%colors.length])
+        .attr('stroke-width', 2)
+        .attr('fill', 'none');
+    }
+
+    yData.forEach(function(v,i) {
+      appendLine(v,i);
+    });
   };
+
 
   return {
     InitLineChart: InitLineChart

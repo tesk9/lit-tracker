@@ -1,6 +1,5 @@
 var View = (function() {
   var callGraph = function(data, bookID) {
-    console.log("DATA: " + data);
     if (data.length >= 2) {
       Grapher.InitLineChart(data, bookID);
     } else {
