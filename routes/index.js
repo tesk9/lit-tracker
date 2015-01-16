@@ -53,7 +53,7 @@ var scrape = function(book, data) {
   }
 }
 
-setInterval(getCurrentRankings, 86400000);
+// setInterval(getCurrentRankings, 200000);
 // getCurrentRankings();
 
  // GET home page. 
@@ -83,17 +83,22 @@ router.get('/urls',
 );
 
 // POST a new book to track
-// router.post('/new',
-//   function(req, res) {
-//     db.addBook({name: req.body.name, author: req.body.author, url: req.body.url}, function(r) {
-//       console.log(r);
-//       download(r[0].url, function(data) {
-//         scrape(r[0], data);
-//       });
-//       res.send({ rankings: JSON.stringify(r[0]) });
-//     });
-//   }
-// );
+router.post('/new',
+  function(req, res) {
+    db.addBook({name: req.body.name, author: req.body.author, url: req.body.url}, function(r) {
+      db.addBookURL(r[0], req.body.url, function(response) {
+        download(req.body.url, function(data) {
+          scrape(r[0], data);
+        });
+        // res.send({ rankings: JSON.stringify(response[0]) });
+        res.send({ 
+          status: 200,
+          book: JSON.stringify(r[0])
+        })
+      })
+    });
+  }
+);
 
 
 module.exports = router;

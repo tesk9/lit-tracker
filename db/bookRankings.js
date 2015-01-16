@@ -28,8 +28,16 @@ module.exports = function() {
     var queryString = ['CREATE TABLE IF NOT EXISTS books(',
                        'book_id SERIAL PRIMARY KEY,',
                        'name text,',
-                       'author text,',
-                       'url text',
+                       'author text',
+                       ');'].join(" ");
+    dbQuery(callback, queryString, []);
+  }
+
+  var createURLs = function(callback) {
+    var queryString = ['CREATE TABLE IF NOT EXISTS urls(',
+                       'url_id SERIAL PRIMARY KEY,',
+                       'url text,',
+                       'book_id integer REFERENCES books(book_id)',
                        ');'].join(" ");
     dbQuery(callback, queryString, []);
   }
@@ -46,14 +54,24 @@ module.exports = function() {
 
   var addBook = function(params, callback) {
     if (params.name && params.author && params.url) {
-      var queryString = ['INSERT INTO books(name, author, url)',
-                         'VALUES ($1, $2, $3)',
-                         'RETURNING *;'].join(" ");
-      dbQuery(callback, queryString, [params.name, params.author, params.url]);
+      var queryString = ['INSERT INTO books(name, author)',
+                         'VALUES ($1, $2)',
+                         'RETURNING *;'
+                         ].join(" ");
+      dbQuery(callback, queryString, [params.name, params.author]);
     } else {
       console.log('database does not accept empty values for book name, author, or url');
     }
   };
+
+  var addBookURL = function(data, url, callback) {
+    console.log("data" + data.book_id)
+    var queryString = ['INSERT INTO urls(book_id, url)',
+                       'VALUES($1, $2)',
+                       'RETURNING *',
+                       ';'].join(" ")
+    dbQuery(callback, queryString, [data.book_id, url])
+  }
 
   var getBookData = function(params, callback) {
     if (params.book_id) {
@@ -91,10 +109,12 @@ module.exports = function() {
   }
 
   createBooks();
+  createURLs();
   createRankings();
 
   return {
     addBook : addBook,
+    addBookURL : addBookURL,
     getBookData : getBookData,
     addRanking : addRanking,
     getAllURLs : getAllURLs,

@@ -93,18 +93,3 @@ var InitLineChart = function(lineData, book_id) {
     .attr('stroke-width', 2)
     .attr('fill', 'none');
 };
-
-$.get('/urls', function(books) {
-  var books = JSON.parse(books.books);
-  books.forEach(function(v,i,a) {
-    $(".svgHolder").append("<div class='container'><div class='text-center'><h3><em><strong>"+v.name+"</strong></em> by "+v.author+"</h3></div></div><div id='visualization"+String(v.book_id)+"'></div><br><hr><br>")
-    $.get('/urls/' + v.book_id, function(data) {
-      var data = JSON.parse(data.rankings);
-      if (data.length >= 2) {
-        InitLineChart(data, v.book_id);
-      } else {
-        $("#visualization" + v.book_id).append("<p class='text-center'>We don't have enough data yet. Please revisit this page later.</p>")
-      }
-    });
-  })
-})
