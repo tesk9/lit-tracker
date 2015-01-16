@@ -45,7 +45,7 @@ module.exports = function() {
   var createRankings = function(callback) {
     var queryString = ['CREATE TABLE IF NOT EXISTS rankings(',
                        'ranking_id SERIAL PRIMARY KEY,',
-                       'book_id integer REFERENCES books(book_id),',
+                       'url_id integer REFERENCES urls(url_id),',
                        'ranking integer,',
                        'date date',
                         ');'].join(" ")
@@ -65,7 +65,6 @@ module.exports = function() {
   };
 
   var addBookURL = function(data, url, callback) {
-    console.log("data" + data.book_id)
     var queryString = ['INSERT INTO urls(book_id, url)',
                        'VALUES($1, $2)',
                        'RETURNING *',
@@ -73,9 +72,9 @@ module.exports = function() {
     dbQuery(callback, queryString, [data.book_id, url])
   }
 
-  var getBookData = function(params, callback) {
+  var getBookURLs = function(params, callback) {
     if (params.book_id) {
-      var queryString = ['SELECT * FROM rankings',
+      var queryString = ['SELECT * FROM urls',
                          'WHERE book_id=$1;'].join(" ");
       dbQuery(callback, queryString, [params.book_id]);
     } else {
@@ -83,26 +82,27 @@ module.exports = function() {
     }
   };
 
-  var getAllURLs = function(callback) {
+  var getAllBooks = function(callback) {
     var queryString = 'SELECT * FROM books';
     dbQuery(callback, queryString, []);
   }
 
   var addRanking = function(params, callback) {
     if (params.book_id && params.ranking && params.date) {
-      var queryString = ['INSERT INTO rankings(book_id, ranking, date)',
+      var queryString = ['INSERT INTO rankings(url_id, ranking, date)',
                        'VALUES ($1, $2, $3);'].join(" ");
-      dbQuery(callback, queryString, [params.book_id, params.ranking, params.date]);
+      dbQuery(callback, queryString, [params.url_id, params.ranking, params.date]);
     } else {
-      console.log('database does not accept empty values for book id, book ranking, or date');
+      console.log('database does not accept empty values for url id, book ranking, or date');
     }
   };
 
-  var getRankingsByBook = function(params, callback) {
-    if (params.book_id) {
+  var getRankingsByURL = function(params, callback) {
+    console.log(params.url_id)
+    if (params.url_id) {
       var queryString = ['SELECT * FROM rankings',
-                         'WHERE book_id=$1'].join(" ");
-      dbQuery(callback, queryString, [params.book_id]);
+                         'WHERE url_id=$1'].join(" ");
+      dbQuery(callback, queryString, [params.url_id]);
     } else {
       console.log('error in bookRankings.js');
     }
@@ -115,10 +115,10 @@ module.exports = function() {
   return {
     addBook : addBook,
     addBookURL : addBookURL,
-    getBookData : getBookData,
+    getBookURLs : getBookURLs,
     addRanking : addRanking,
-    getAllURLs : getAllURLs,
-    getRankingsByBook : getRankingsByBook
+    getAllBooks : getAllBooks,
+    getRankingsByURL : getRankingsByURL
   }
 
 }();

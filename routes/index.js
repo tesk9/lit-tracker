@@ -28,7 +28,7 @@ var download = function(url, callback) {
 
 // Amazon Scraper
 var getCurrentRankings = function() {
-  db.getAllURLs(function(result) {
+  db.getAllBooks(function(result) {
     var books = result;  
     books.forEach(function(v) {
       download(v.url, function(data) {
@@ -65,18 +65,24 @@ router.get('/',
 );
 
  // GET all rankings for specified book
-router.get('/urls/:id',
+router.get('/books/:id',
   function(req, res) {
-    db.getRankingsByBook( {book_id: req.params['id']}, function(r) {
-      res.send({ rankings: JSON.stringify(r) });
+    var chunk = [];
+    db.getBookURLs({book_id: req.params['id']}, function(urls) {
+      urls.forEach(function(url) {
+        db.getRankingsByURL({url_id: url.url_id}, function(r) {
+          chunk.push(JSON.stringify(r));
+        });
+      })
     })
+    res.send({ rankings: chunk});
   }
 );
 
 // GET all tracked books
-router.get('/urls',
+router.get('/books',
   function(req, res) {
-    db.getAllURLs(function(books) {
+    db.getAllBooks(function(books) {
       res.send({ books: JSON.stringify(books) });
     })
   }
@@ -90,7 +96,6 @@ router.post('/new',
         download(req.body.url, function(data) {
           scrape(r[0], data);
         });
-        // res.send({ rankings: JSON.stringify(response[0]) });
         res.send({ 
           status: 200,
           book: JSON.stringify(r[0])
