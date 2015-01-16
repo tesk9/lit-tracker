@@ -69,17 +69,29 @@ router.get('/',
 );
 
  // GET all rankings for specified book
+// router.get('/books/:id',
+//   function(req, res) {
+//     var chunk = [];
+//     db.getBookURLs({book_id: req.params['id']}, function(urls) {
+//       urls.forEach(function(url) {
+//         db.getRankingsByURL({url_id: url.url_id}, function(r) {
+//           chunk.push(r);
+//         });
+//       })
+//       console.log(chunk.length)
+//       console.log(urls.length)
+//       if(chunk.length == urls.length) {
+//         res.send({ rankings: JSON.stringify(chunk) });
+//       }
+//     })
+//   }
+// );
+
 router.get('/books/:id',
   function(req, res) {
-    var chunk = [];
-    db.getBookURLs({book_id: req.params['id']}, function(urls) {
-      urls.forEach(function(url) {
-        db.getRankingsByURL({url_id: url.url_id}, function(r) {
-          chunk.push(JSON.stringify(r));
-        });
-      })
+    db.getRankingsByBook({book_id: req.params['id']}, function(rankings) {
+        res.send({ rankings: JSON.stringify(rankings) });
     })
-    res.send({ rankings: chunk});
   }
 );
 

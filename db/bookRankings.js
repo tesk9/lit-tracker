@@ -97,14 +97,14 @@ module.exports = function() {
     }
   };
 
-  var getRankingsByURL = function(params, callback) {
-    console.log(params.url_id)
-    if (params.url_id) {
-      var queryString = ['SELECT * FROM rankings',
-                         'WHERE url_id=$1'].join(" ");
-      dbQuery(callback, queryString, [params.url_id]);
+  var getRankingsByBook = function(params, callback) {
+    if (params.book_id) {
+      var queryString = ['SELECT *',
+                            'FROM rankings r, urls u',
+                            'WHERE u.book_id=$1'].join(" ");
+      dbQuery(callback, queryString, [params.book_id]);
     } else {
-      console.log('error in bookRankings.js');
+      console.log('Missing book_id in params');
     }
   }
 
@@ -118,7 +118,8 @@ module.exports = function() {
     getBookURLs : getBookURLs,
     addRanking : addRanking,
     getAllBooks : getAllBooks,
-    getRankingsByURL : getRankingsByURL
+    // getRankingsByURL : getRankingsByURL
+    getRankingsByBook: getRankingsByBook
   }
 
 }();

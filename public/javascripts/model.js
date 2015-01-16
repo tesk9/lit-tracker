@@ -12,7 +12,9 @@ var Query = (function() {
 
   var getBookRankings = function(book, callback) {
     $.get('/books/' + book.book_id, function(data) {
+      console.log(data)
       var data = JSON.parse(data.rankings);
+      console.log(data)
       if(callback) {
         callback(data, book.book_id)
       }
@@ -25,3 +27,4 @@ var Query = (function() {
   };
   
 })();
+
