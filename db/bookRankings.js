@@ -101,7 +101,7 @@ module.exports = function() {
     if (params.book_id) {
       var queryString = ['SELECT *',
                             'FROM rankings r, urls u',
-                            'WHERE u.book_id=$1'].join(" ");
+                            'WHERE u.book_id=$1 AND u.url_id = r.url_id'].join(" ");
       dbQuery(callback, queryString, [params.book_id]);
     } else {
       console.log('Missing book_id in params');
@@ -118,7 +118,6 @@ module.exports = function() {
     getBookURLs : getBookURLs,
     addRanking : addRanking,
     getAllBooks : getAllBooks,
-    // getRankingsByURL : getRankingsByURL
     getRankingsByBook: getRankingsByBook
   }
 
