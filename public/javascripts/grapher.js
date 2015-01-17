@@ -14,11 +14,12 @@ var Grapher = (function() {
     urlHolder.forEach(function(url_id) {
       yArr.push(y[url_id]);
     })
-    return yArr;
+    return [yArr, urlHolder]
   }
 
   var InitLineChart = function(lineData, book_id) {
-    var yData = process(lineData);
+    var massagedData = process(lineData);
+    var yData = massagedData[0], urlIDs = massagedData[1];
     var colors = [
       'steelblue',
       'green',
@@ -104,6 +105,39 @@ var Grapher = (function() {
       .style("font-size", "16px") 
       .style("text-decoration", "underline")  
       .text("Amazon Sales Ranking versus Date");
+
+    // append legend
+    var legend = vis.append("g")
+      .attr("class", "legend")
+      .attr("height", 100)
+      .attr("width", 100)
+      .attr("transform", "translate(-20,50)");
+
+    legend.selectAll('rect')
+      .data(yData)
+      .enter()
+      .append("rect")
+      .attr("x", WIDTH - 65)
+      .attr("y", function(d,i) {
+        return i*20;
+      })
+      .attr("width", 10)
+      .attr("height", 10)
+      .style("fill", function(d,i) {
+        return colors[i%colors.length];
+      });
+
+    legend.selectAll('text')
+      .data(yData)
+      .enter()
+      .append("text")
+      .attr("x", WIDTH - 52)
+      .attr("y", function(d,i) {
+        return i*20 + 9;
+      })
+      .text(function(d,i) {
+        return urlIDs[i];
+      });
 
   
     var appendLine = function(inputData, i) {
