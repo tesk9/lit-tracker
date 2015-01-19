@@ -12,7 +12,7 @@ var cleanUpInt = function(numStr) {
 // Helper function for scraper
 var download = function(url, callback) {
   http.get(url, function(res) {
-  console.log("Got response: " + res.statusCode);
+  // console.log("Got response: " + res.statusCode);
   var data = "";
   res.on("data", function(chunk) {
       data += chunk;
@@ -57,7 +57,7 @@ var scrape = function(url, data) {
   }
 }
 
-// setInterval(getCurrentRankings, 3600);
+setInterval(getCurrentRankings, 900000);
 // getCurrentRankings();
 
  // GET home page. 

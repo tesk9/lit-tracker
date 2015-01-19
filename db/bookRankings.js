@@ -7,7 +7,7 @@ module.exports = function() {
       if(err) {
         return console.error('error fetching client from pool', err);
       }
-
+      
       client.query(queryString, array, function(err, result) {
         done();
 
@@ -57,6 +57,7 @@ module.exports = function() {
   createRankings();
 
   var addBook = function(params, callback) {
+    if(!params.name || !params.author) { return; }
     if (params.name && params.author && params.url) {
       var queryString = ['INSERT INTO books(name, author)',
                          'VALUES ($1, $2)',
@@ -69,6 +70,7 @@ module.exports = function() {
   };
 
   var addBookURL = function(params, callback) {
+    if(!params.book_id || !params.url) { return; }
     var queryString = ['INSERT INTO urls(book_id, url, edition)',
                        'VALUES($1, $2, $3)',
                        'RETURNING *',
@@ -92,7 +94,7 @@ module.exports = function() {
   }
 
   var addRanking = function(params, callback) {
-    if (params.url_id && params.ranking && params.date) {
+    if (params.url_id && params.ranking && params.date && (params.date instanceof Date)) {
       var queryString = ['INSERT INTO rankings(url_id, ranking, date)',
                        'VALUES ($1, $2, $3);'].join(" ");
       dbQuery(callback, queryString, [params.url_id, params.ranking, params.date]);
