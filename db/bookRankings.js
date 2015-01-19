@@ -32,26 +32,29 @@ module.exports = function() {
                        ');'].join(" ");
     dbQuery(callback, queryString, []);
   }
+  createBooks();
 
   var createURLs = function(callback) {
     var queryString = ['CREATE TABLE IF NOT EXISTS urls(',
                        'url_id SERIAL PRIMARY KEY,',
                        'url text,',
-                       'desc text,',
+                       'edition text,',
                        'book_id integer REFERENCES books(book_id)',
                        ');'].join(" ");
     dbQuery(callback, queryString, []);
   }
+  createURLs();
 
   var createRankings = function(callback) {
     var queryString = ['CREATE TABLE IF NOT EXISTS rankings(',
                        'ranking_id SERIAL PRIMARY KEY,',
                        'url_id integer REFERENCES urls(url_id),',
                        'ranking integer,',
-                       'date date',
+                       'date timestamp',
                         ');'].join(" ")
     dbQuery(callback, queryString, []);
   }
+  createRankings();
 
   var addBook = function(params, callback) {
     if (params.name && params.author && params.url) {
@@ -108,10 +111,6 @@ module.exports = function() {
       console.log('Missing book_id in params');
     }
   }
-
-  createBooks();
-  createURLs();
-  createRankings();
 
   return {
     addBook : addBook,

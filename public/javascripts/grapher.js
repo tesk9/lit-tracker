@@ -55,7 +55,8 @@ var Grapher = (function() {
     // define data ranges with .scale
     xRange = d3.time.scale().range([0, WIDTH]).domain([xAxisData[0], xAxisData[xAxisData.length-1]]),
     yRange = d3.scale.linear().range([0, HEIGHT]).domain([d3.min(lineData, function(d) {
-      return d.ranking;
+      console.log(d.ranking);
+      return 0;
     }), d3.max(lineData, function(d) {
       return d.ranking;
     })]),

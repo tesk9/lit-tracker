@@ -57,7 +57,7 @@ var scrape = function(url, data) {
   }
 }
 
-// setInterval(getCurrentRankings, 1005);
+// setInterval(getCurrentRankings, 3600);
 // getCurrentRankings();
 
  // GET home page. 
@@ -80,7 +80,7 @@ router.get('/books/:id',
 // POST a new url to track
 router.get('/books/:id/urls/new',
   function(req, res) {
-    db.addBookURL({book_id: req.params['id'], url: req.body.url, desc: req.body.edition}, function(r) {
+    db.addBookURL({book_id: req.params['id'], url: req.body.url, edition: req.body.edition}, function(r) {
       console.log("No router error?")
       res.send({ status: 200 });
     });
@@ -101,7 +101,7 @@ router.post('/books/new',
     db.addBook({name: req.body.name, author: req.body.author, url: req.body.url}, function(r) {
       db.addBookURL({book_id: r[0].book_id, url: req.body.url, edition: req.body.edition}, function(response) {
         download(req.body.url, function(data) {
-          scrape(r[0], data);
+          scrape(response[0], data);
         });
         res.send({ 
           status: 200,
