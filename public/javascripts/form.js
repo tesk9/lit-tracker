@@ -29,7 +29,7 @@ var addBook = function() {
   // errMessage("Adding books disabled. Please try again later.")
 
   $.ajax({
-    url: '/new',
+    url: '/books/new',
     type: 'POST',
     data: { name: $title,
             author: $auth,

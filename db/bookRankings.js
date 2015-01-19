@@ -37,6 +37,7 @@ module.exports = function() {
     var queryString = ['CREATE TABLE IF NOT EXISTS urls(',
                        'url_id SERIAL PRIMARY KEY,',
                        'url text,',
+                       'desc text,',
                        'book_id integer REFERENCES books(book_id)',
                        ');'].join(" ");
     dbQuery(callback, queryString, []);
@@ -64,12 +65,12 @@ module.exports = function() {
     }
   };
 
-  var addBookURL = function(data, url, callback) {
-    var queryString = ['INSERT INTO urls(book_id, url)',
-                       'VALUES($1, $2)',
+  var addBookURL = function(params, callback) {
+    var queryString = ['INSERT INTO urls(book_id, url, edition)',
+                       'VALUES($1, $2, $3)',
                        'RETURNING *',
                        ';'].join(" ")
-    dbQuery(callback, queryString, [data.book_id, url])
+    dbQuery(callback, queryString, [params.book_id, params.url, params.edition]);
   }
 
   var getBookURLs = function(params, callback) {

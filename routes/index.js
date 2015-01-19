@@ -69,24 +69,6 @@ router.get('/',
 );
 
  // GET all rankings for specified book
-// router.get('/books/:id',
-//   function(req, res) {
-//     var chunk = [];
-//     db.getBookURLs({book_id: req.params['id']}, function(urls) {
-//       urls.forEach(function(url) {
-//         db.getRankingsByURL({url_id: url.url_id}, function(r) {
-//           chunk.push(r);
-//         });
-//       })
-//       console.log(chunk.length)
-//       console.log(urls.length)
-//       if(chunk.length == urls.length) {
-//         res.send({ rankings: JSON.stringify(chunk) });
-//       }
-//     })
-//   }
-// );
-
 router.get('/books/:id',
   function(req, res) {
     db.getRankingsByBook({book_id: req.params['id']}, function(rankings) {
@@ -94,6 +76,15 @@ router.get('/books/:id',
     })
   }
 );
+
+// POST a new url to track
+router.get('/books/:id/urls/new',
+  function(req, res) {
+    db.addBookURL({book_id: req.params['id'], url: req.body.url, desc: req.body.edition}, function(r) {
+      console.log("No router error?")
+      res.send({ status: 200 });
+    });
+  })
 
 // GET all tracked books
 router.get('/books',
@@ -105,10 +96,10 @@ router.get('/books',
 );
 
 // POST a new book to track
-router.post('/new',
+router.post('/books/new',
   function(req, res) {
     db.addBook({name: req.body.name, author: req.body.author, url: req.body.url}, function(r) {
-      db.addBookURL(r[0], req.body.url, function(response) {
+      db.addBookURL({book_id: r[0].book_id, url: req.body.url, desc: req.body.edition}, function(response) {
         download(req.body.url, function(data) {
           scrape(r[0], data);
         });

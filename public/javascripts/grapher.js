@@ -2,24 +2,26 @@ var Grapher = (function() {
   var process = function(data) {
     var y = {};
     var urlHolder = [];
+    var urlEditions = [];
     data.forEach(function(v) {
       if(y[v.url_id] !== undefined) {
         y[v.url_id].push({date: v.date, ranking: v.ranking});
       } else {
         y[v.url_id] = [{date: v.date, ranking: v.ranking}];
-        urlHolder.push(v.url_id)
+        urlHolder.push(v.url_id);
+        urlEditions.push(v.edition);
       }
     })
     var yArr = [];
     urlHolder.forEach(function(url_id) {
       yArr.push(y[url_id]);
     })
-    return [yArr, urlHolder]
+    return [yArr, urlHolder, urlEditions]
   }
 
   var InitLineChart = function(lineData, book_id) {
     var massagedData = process(lineData);
-    var yData = massagedData[0], urlIDs = massagedData[1];
+    var yData = massagedData[0], urlIDs = massagedData[1], urlEditions = massagedData[2];
     var colors = [
       'steelblue',
       'green',
@@ -117,7 +119,7 @@ var Grapher = (function() {
       .data(yData)
       .enter()
       .append("rect")
-      .attr("x", WIDTH - 65)
+      .attr("x", WIDTH - 65 - 100)
       .attr("y", function(d,i) {
         return i*20;
       })
@@ -131,12 +133,12 @@ var Grapher = (function() {
       .data(yData)
       .enter()
       .append("text")
-      .attr("x", WIDTH - 52)
+      .attr("x", WIDTH - 52 - 100)
       .attr("y", function(d,i) {
         return i*20 + 9;
       })
       .text(function(d,i) {
-        return urlIDs[i];
+        return urlEditions[i];
       });
 
   
