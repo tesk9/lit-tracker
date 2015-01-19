@@ -99,7 +99,7 @@ router.get('/books',
 router.post('/books/new',
   function(req, res) {
     db.addBook({name: req.body.name, author: req.body.author, url: req.body.url}, function(r) {
-      db.addBookURL({book_id: r[0].book_id, url: req.body.url, desc: req.body.edition}, function(response) {
+      db.addBookURL({book_id: r[0].book_id, url: req.body.url, edition: req.body.edition}, function(response) {
         download(req.body.url, function(data) {
           scrape(r[0], data);
         });
