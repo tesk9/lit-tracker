@@ -7,7 +7,7 @@ module.exports = function() {
       if(err) {
         return console.error('error fetching client from pool', err);
       }
-      
+
       client.query(queryString, array, function(err, result) {
         done();
 
@@ -32,7 +32,6 @@ module.exports = function() {
                        ');'].join(" ");
     dbQuery(callback, queryString, []);
   }
-  createBooks();
 
   var createURLs = function(callback) {
     var queryString = ['CREATE TABLE IF NOT EXISTS urls(',
@@ -43,7 +42,6 @@ module.exports = function() {
                        ');'].join(" ");
     dbQuery(callback, queryString, []);
   }
-  createURLs();
 
   var createRankings = function(callback) {
     var queryString = ['CREATE TABLE IF NOT EXISTS rankings(',
@@ -54,18 +52,38 @@ module.exports = function() {
                         ');'].join(" ")
     dbQuery(callback, queryString, []);
   }
-  createRankings();
+
+  var dropTables = function(callback) {
+    var queryString = ['DROP TABLE IF EXISTS rankings CASCADE;',
+                       'DROP TABLE IF EXISTS urls CASCADE;',
+                       'DROP TABLE IF EXISTS books CASCADE;'].join(" ");
+    dbQuery(callback, queryString, []);
+  }
+
+  var createTables = function(callback) {
+    createBooks(function() {
+      createURLs(function() {
+        createRankings(function(){
+          if(callback) {
+            callback(); 
+          }
+        });
+      })
+    });
+  }
 
   var addBook = function(params, callback) {
-    if(!params.name || !params.author) { return; }
-    if (params.name && params.author && params.url) {
+    if (params.name && params.author) {
       var queryString = ['INSERT INTO books(name, author)',
                          'VALUES ($1, $2)',
                          'RETURNING *;'
                          ].join(" ");
       dbQuery(callback, queryString, [params.name, params.author]);
     } else {
-      console.log('database does not accept empty values for book name, author, or url');
+      console.log('database does not accept empty values for book name or author.');
+      if(callback) {
+        callback();
+      }
     }
   };
 
@@ -120,7 +138,9 @@ module.exports = function() {
     getBookURLs : getBookURLs,
     addRanking : addRanking,
     getAllBooks : getAllBooks,
-    getRankingsByBook: getRankingsByBook
+    getRankingsByBook: getRankingsByBook,
+    createTables : createTables,
+    dropTables : dropTables
   }
 
 }();
