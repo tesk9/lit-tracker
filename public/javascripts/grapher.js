@@ -19,22 +19,70 @@ var Grapher = (function() {
     return [yArr, urlHolder, urlEditions]
   }
 
+  var yRangeOptions = function(yData) {
+    var ranges = [];
+    yData.forEach(function(v) {
+      ranges.push({
+      range:  [ d3.min(v, function(d) {
+            return d.ranking;
+          }), d3.max(v, function(d) {
+            return d.ranking;
+          })
+        ],
+      show: true
+      });
+    });
+    return ranges;
+  }
+
+  // get ranges in sales ranking for each edition
+  var buildRanges = function(ranges) {
+    var allRanges = []
+    ranges.forEach(function(v) {
+      if(v.show) {
+        allRanges.push(v.range[0]);
+        allRanges.push(v.range[1]);
+      }
+    });
+
+    // If none of the editions are selected, avoid D3 path error by
+    //   setting first range to default range
+    if(allRanges.length == 0) {
+      allRanges = [ranges[0].range[0], ranges[1].range[1]];
+    }
+
+    var yLow = Math.min.apply(null, allRanges);
+    var yHigh = Math.max.apply(null, allRanges);
+    return [yLow, yHigh];
+  }
+
   var InitLineChart = function(lineData, book_id) {
-    var massagedData = process(lineData);
-    var yData = massagedData[0], urlIDs = massagedData[1], urlEditions = massagedData[2];
-    var colors = [
+    var hideLine = function(d,i) {
+      var elem = d3.select("#url-"+urlIDs[i]);
+      var newOpacity = (elem.style("opacity") == 0) ? 1 : 0;
+      elem.transition().duration(700).style("opacity", newOpacity);
+    };
+
+    var massagedData = process(lineData),
+    yData = massagedData[0], urlIDs = massagedData[1], urlEditions = massagedData[2],
+
+    allRanges = yRangeOptions(yData),
+    ranges = buildRanges(allRanges),
+    
+    colors = [
       'steelblue',
       'green',
       'red',
       'purple'
-    ]
+    ],
 
-    var MARGINS = {
+    MARGINS = {
           top: 30,
           right: 20,
           bottom: 40,
           left: 100
-        }
+        },
+
     WIDTH = 1000 - MARGINS.left - MARGINS.right, 
     HEIGHT = 500 - MARGINS.top - MARGINS.bottom,
     
@@ -52,14 +100,13 @@ var Grapher = (function() {
     // get all dates in data set
     xAxisData = lineData.map(function(v,i,a) { return Date.parse(v.date); }),
     
-    // define data ranges with .scale
-    xRange = d3.time.scale().range([0, WIDTH]).domain([xAxisData[0], xAxisData[xAxisData.length-1]]),
-    yRange = d3.scale.linear().range([0, HEIGHT]).domain([d3.min(lineData, function(d) {
-      console.log(d.ranking);
-      return 0;
-    }), d3.max(lineData, function(d) {
-      return d.ranking;
-    })]),
+    // scales
+    xScale = d3.time.scale().range([0, WIDTH]),
+    yScale = d3.scale.linear().range([0, HEIGHT]),
+
+    // initial ranges
+    xRange = xScale.domain([xAxisData[0], xAxisData[xAxisData.length-1]]),
+    yRange = yScale.domain([ranges[0], ranges[1]]),
 
     // define axes
     xAxis = d3.svg.axis()
@@ -75,7 +122,7 @@ var Grapher = (function() {
 
     // append x-axis
     vis.append('g')
-      .attr('class', 'x axis')
+      .attr('class', 'xaxis')
       .attr('transform', 'translate(0,' + HEIGHT+ ')')
       .call(xAxis);
 
@@ -88,7 +135,7 @@ var Grapher = (function() {
      
     // append y-xis
     vis.append('g')
-      .attr('class', 'y axis')
+      .attr('class', 'yaxis')
       .call(yAxis);
 
     // append y label
@@ -128,6 +175,9 @@ var Grapher = (function() {
       .attr("height", 10)
       .style("fill", function(d,i) {
         return colors[i%colors.length];
+      })
+      .on("click", function(d,i) {
+        rescale(d,i);
       });
 
     legend.selectAll('text')
@@ -140,22 +190,38 @@ var Grapher = (function() {
       })
       .text(function(d,i) {
         return urlEditions[i];
+      })
+      .on("click", function(d,i) {
+        rescale(d,i);
       });
 
-  
-    var appendLine = function(inputData, i) {
-      var lineFunc = d3.svg.line()
-        .x(function(d) {
-          return xRange(Date.parse(d.date));
-        })
-        .y(function(d) {
-          return yRange(d.ranking);
-        })
-        .interpolate('linear');
+    var lineFunc = d3.svg.line()
+      .x(function(d) {
+        return xRange(Date.parse(d.date));
+      })
+      .y(function(d) {
+        return yRange(d.ranking);
+      })
+      .interpolate('linear');
 
+    function rescale (d,i) {
+      allRanges[i].show = (allRanges[i].show == true) ? false : true;
+      ranges = buildRanges(allRanges);
+      yRange = yRange.domain([ranges[0], ranges[1]]);
+      yData.forEach(function(v,i) {
+        d3.selectAll("#url-"+urlIDs[i]).remove()
+        appendLine(v,i);
+      });
+      d3.select(".yaxis").transition().duration(1500).call(yAxis);
+      hideLine(d,i);
+    }
+
+
+    var appendLine = function(inputData, i) {
       vis.append('svg:path')
-        .attr('d', lineFunc(inputData))
         .attr('stroke', colors[i%colors.length])
+        .attr('d', lineFunc(inputData))
+        .attr('id', "url-"+urlIDs[i])
         .attr('stroke-width', 2)
         .attr('fill', 'none');
     }

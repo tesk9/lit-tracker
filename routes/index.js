@@ -81,7 +81,6 @@ router.get('/books/:id',
 router.get('/books/:id/urls/new',
   function(req, res) {
     db.addBookURL({book_id: req.params['id'], url: req.body.url, edition: req.body.edition}, function(r) {
-      console.log("No router error?")
       res.send({ status: 200 });
     });
   })
