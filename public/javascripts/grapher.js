@@ -178,13 +178,18 @@ var Grapher = (function() {
         return colors[i%colors.length];
       })
       .on("click", function(d,i) {
-        rescale(d,i);
+        var $rect = d3.select(this).node();
+        var $text = d3.select($rect.parentNode).select("#text" + urlIDs[i]);
+        clickHandler($text, d, i);
       });
 
     legend.selectAll('text')
       .data(yData)
       .enter()
       .append("text")
+      .attr("id", function(d,i) {
+        return "text" + urlIDs[i]
+      })
       .attr("x", WIDTH - 52 - 100)
       .attr("y", function(d,i) {
         return i*20 + 9;
@@ -193,8 +198,22 @@ var Grapher = (function() {
         return urlEditions[i];
       })
       .on("click", function(d,i) {
-        rescale(d,i);
+        var $this = d3.select(this);
+        clickHandler($this, d, i);
       });
+
+    function clickHandler($this, d, i) {
+      strikeThrough($this);
+      rescale(d,i);   
+    }
+
+    function strikeThrough ($this) {
+      if($this.style("text-decoration") == "line-through") {
+        $this.style("text-decoration", "none");
+      } else {
+        $this.style("text-decoration", "line-through")
+      }
+    }
 
     function rescale (d,i) {
       allRanges[i].show = (allRanges[i].show == true) ? false : true;
