@@ -57,7 +57,7 @@ var scrape = function(url, data) {
   }
 }
 
-setInterval(getCurrentRankings, 900000);
+setInterval(getCurrentRankings, 3600000);
 // getCurrentRankings();
 
  // GET home page. 
