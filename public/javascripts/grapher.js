@@ -95,7 +95,8 @@ var Grapher = (function() {
         .attr("width", WIDTH + MARGINS.left + MARGINS.right)
         .attr("height", HEIGHT + MARGINS.top + MARGINS.bottom)
       .append("g")
-        .attr("transform", "translate(" + MARGINS.left + "," + MARGINS.top + ")"),
+        .attr("transform", "translate(" + MARGINS.left + "," + MARGINS.top + ")")
+        .attr("id", "g-"+book_id),
 
     // get all dates in data set
     xAxisData = lineData.map(function(v,i,a) { return Date.parse(v.date); }),
@@ -195,29 +196,45 @@ var Grapher = (function() {
         rescale(d,i);
       });
 
-    var lineFunc = d3.svg.line()
-      .x(function(d) {
-        return xRange(Date.parse(d.date));
-      })
-      .y(function(d) {
-        return yRange(d.ranking);
-      })
-      .interpolate('linear');
-
     function rescale (d,i) {
       allRanges[i].show = (allRanges[i].show == true) ? false : true;
       ranges = buildRanges(allRanges);
-      yRange = yRange.domain([ranges[0], ranges[1]]);
+      yRange = yScale.domain([ranges[0], ranges[1]]);
+
+      // construct new lines according to new scale
+      var redoLine = d3.svg.line()
+        .x(function(d) {
+          return xRange(Date.parse(d.date));
+        })
+        .y(function(d) {
+          return yRange(d.ranking);
+        })
+        .interpolate('linear');
+
+      // set up transitions
+      trans = d3.select("#g-"+book_id).transition();
+
+      // transition to new lines
       yData.forEach(function(v,i) {
-        d3.selectAll("#url-"+urlIDs[i]).remove()
-        appendLine(v,i);
+        trans.selectAll("#url-"+urlIDs[i])
+          .duration(1500)
+          .attr("d", redoLine(v))
       });
-      d3.select(".yaxis").transition().duration(1500).call(yAxis);
+      trans.select(".yaxis").duration(1500).call(yAxis);
       hideLine(d,i);
     }
 
 
     var appendLine = function(inputData, i) {
+      var lineFunc = d3.svg.line()
+        .x(function(d) {
+          return xRange(Date.parse(d.date));
+        })
+        .y(function(d) {
+          return yRange(d.ranking);
+        })
+        .interpolate('linear');
+
       vis.append('svg:path')
         .attr('stroke', colors[i%colors.length])
         .attr('d', lineFunc(inputData))
