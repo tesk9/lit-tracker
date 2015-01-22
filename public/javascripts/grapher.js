@@ -57,12 +57,6 @@ var Grapher = (function() {
   }
 
   var InitLineChart = function(lineData, book_id) {
-    var hideLine = function(d,i) {
-      var elem = d3.select("#url-"+urlIDs[i]);
-      var newOpacity = (elem.style("opacity") == 0) ? 1 : 0;
-      elem.transition().duration(700).style("opacity", newOpacity);
-    };
-
     var massagedData = process(lineData),
     yData = massagedData[0], urlIDs = massagedData[1], urlEditions = massagedData[2],
 
@@ -202,7 +196,7 @@ var Grapher = (function() {
         clickHandler($this, d, i);
       });
 
-    function clickHandler($this, d, i) {
+    function clickHandler ($this, d, i) {
       strikeThrough($this);
       rescale(d,i);   
     }
@@ -215,7 +209,14 @@ var Grapher = (function() {
       }
     }
 
+    function hideLine (d,i) {
+      var elem = d3.select("#url-"+urlIDs[i]);
+      var newOpacity = (elem.style("opacity") == 0) ? 1 : 0;
+      elem.style("opacity", newOpacity);
+    };
+
     function rescale (d,i) {
+      // toggle whether dataset i is part of range consideration or not
       allRanges[i].show = (allRanges[i].show == true) ? false : true;
       ranges = buildRanges(allRanges);
       yRange = yScale.domain([ranges[0], ranges[1]]);
@@ -234,13 +235,13 @@ var Grapher = (function() {
       trans = d3.select("#g-"+book_id).transition();
 
       // transition to new lines
-      yData.forEach(function(v,i) {
-        trans.selectAll("#url-"+urlIDs[i])
+      yData.forEach(function(v,ind) {
+        trans.selectAll("#url-"+urlIDs[ind])
           .duration(1500)
           .attr("d", redoLine(v))
       });
-      trans.select(".yaxis").duration(1500).call(yAxis);
       hideLine(d,i);
+      trans.select(".yaxis").duration(1500).call(yAxis);
     }
 
 
