@@ -31,7 +31,7 @@ module.exports = function() {
                        'author text',
                        ');'].join(" ");
     dbQuery(callback, queryString, []);
-  }
+  };
 
   var createURLs = function(callback) {
     var queryString = ['CREATE TABLE IF NOT EXISTS urls(',
@@ -41,7 +41,7 @@ module.exports = function() {
                        'book_id integer REFERENCES books(book_id)',
                        ');'].join(" ");
     dbQuery(callback, queryString, []);
-  }
+  };
 
   var createRankings = function(callback) {
     var queryString = ['CREATE TABLE IF NOT EXISTS rankings(',
@@ -51,14 +51,14 @@ module.exports = function() {
                        'date timestamp',
                         ');'].join(" ")
     dbQuery(callback, queryString, []);
-  }
+  };
 
   var dropTables = function(callback) {
     var queryString = ['DROP TABLE IF EXISTS rankings CASCADE;',
                        'DROP TABLE IF EXISTS urls CASCADE;',
                        'DROP TABLE IF EXISTS books CASCADE;'].join(" ");
     dbQuery(callback, queryString, []);
-  }
+  };
 
   var createTables = function(callback) {
     createBooks(function() {
@@ -70,22 +70,36 @@ module.exports = function() {
         });
       })
     });
-  }
+  };
 
   var addBook = function(params, callback) {
-    if (params.name && params.author) {
+    if (params.name && params.author && params.name.length > 5 && params.author.length > 5) {
       var queryString = ['INSERT INTO books(name, author)',
                          'VALUES ($1, $2)',
                          'RETURNING *;'
                          ].join(" ");
-      dbQuery(callback, queryString, [params.name, params.author]);
+      checkForBook(params, function() {
+        dbQuery(callback, queryString, [params.name, params.author]);
+      });
     } else {
-      console.log('database does not accept empty values for book name or author.');
+      throw new Error('database does not accept empty values for book name or author.');
       if(callback) {
         callback();
       }
     }
   };
+
+  var checkForBook = function(params, callback) {
+    var queryString = ['SELECT * FROM books',
+                      'WHERE name=$1 AND author=$2;'].join(" ");
+    dbQuery(function(results) {
+      if(results.length > 0) {
+        throw new Error("Book is already in database.");
+      } else {
+        callback();
+      }
+    }, queryString, [params.name, params.author]);
+  }
 
   var addBookURL = function(params, callback) {
     if(!params.book_id || !params.url) { return; }

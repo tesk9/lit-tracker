@@ -2,7 +2,6 @@ $(document).ready(function() {
 
   // new-book form submit:
   $("#submit").on('click', function(e) {
-    console.log("button clicked")
     addBook();
   });
   $("#new-book-url").on('keyup', function(e) {
@@ -27,26 +26,24 @@ var addBook = function() {
     return;
   }
 
-  errMessage("Adding books disabled. Please try again later.")
-
-  // $.ajax({
-  //   url: '/books/new',
-  //   type: 'POST',
-  //   data: { name: $title,
-  //           author: $auth,
-  //           url: $url,
-  //           edition: $desc
-  //         },
-  //   success: function(r) {
-  //     var data = JSON.parse(r.book);
-  //     console.log("Post Book Status: " + r.status)
-  //     $("#formHolder").prepend("<p>"+data.name+" by "+data.author+" has been added.</p>")
-  //     $("#new-book-name").val("");
-  //     $("#new-book-author").val("");
-  //     $("#new-book-url").val("");
-  //     $("#new-url-desc").val("");
-  //   }
-  //   });
+  $.ajax({
+    url: '/books/new',
+    type: 'POST',
+    data: { name: $title,
+            author: $auth,
+            url: $url,
+            edition: $desc
+          },
+    success: function(r) {
+      var data = JSON.parse(r.book);
+      console.log("Post Book Status: " + r.status)
+      $("#formHolder").prepend("<p>"+data.name+" by "+data.author+" has been added.</p>")
+      $("#new-book-name").val("");
+      $("#new-book-author").val("");
+      $("#new-book-url").val("");
+      $("#new-url-desc").val("");
+    }
+  });
 
 };
 

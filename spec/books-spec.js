@@ -27,6 +27,12 @@ describe("Books Table: ", function(done) {
     done();
   });
 
+  it("Does not add multiples of books", function() {
+    expect(function() {
+      db.checkForBook({name: "Yes Please", author: "Amy Poehler"}, function() {});
+    }).toThrow();
+  });
+
   describe("Returns all books", function(done) {
     var booksLength;
 
@@ -47,15 +53,13 @@ describe("Books Table: ", function(done) {
       done();
     })
 
-    it("Does not add empty rows to books table", function(done) {
-      db.addBook({name: "", author: "Author"}, function() {
-        db.addBook({name: "Name", author: ""}, function() {
-          db.getAllBooks(function(books) {
-            expect(books.length).toEqual(3);
-            done();
-          });         
-        });
-      });
+    it("Does not add empty rows to books table", function() {
+      expect(function() {
+        db.addBook({name: "", author: "Author"}, function() {});
+      }).toThrow();
+      expect(function() {
+        db.addBook({name: "Name", author: ""}, function() {});
+      }).toThrow();
     });
 
   })

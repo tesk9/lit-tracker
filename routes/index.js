@@ -95,21 +95,21 @@ router.get('/books',
 );
 
 // POST a new book to track
-// router.post('/books/new',
-//   function(req, res) {
-//     db.addBook({name: req.body.name, author: req.body.author, url: req.body.url}, function(r) {
-//       db.addBookURL({book_id: r[0].book_id, url: req.body.url, edition: req.body.edition}, function(response) {
-//         download(req.body.url, function(data) {
-//           scrape(response[0], data);
-//         });
-//         res.send({ 
-//           status: 200,
-//           book: JSON.stringify(r[0])
-//         })
-//       })
-//     });
-//   }
-// );
+router.post('/books/new',
+  function(req, res) {
+    db.addBook({name: req.body.name, author: req.body.author, url: req.body.url}, function(r) {
+      db.addBookURL({book_id: r[0].book_id, url: req.body.url, edition: req.body.edition}, function(response) {
+        download(req.body.url, function(data) {
+          scrape(response[0], data);
+        });
+        res.send({ 
+          status: 200,
+          book: JSON.stringify(r[0])
+        })
+      })
+    });
+  }
+);
 
 
 module.exports = router;

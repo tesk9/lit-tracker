@@ -8,7 +8,7 @@ beforeEach(function(done) {
   });
 })
 
-describe("Urls Table", function(done) {
+xdescribe("Urls Table", function(done) {
   var book_id, book_id2;
 
   beforeEach(function(done) {
