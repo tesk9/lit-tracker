@@ -51,7 +51,6 @@ var scrape = function(url, data) {
     var end = sales.indexOf(" ");
     sales = sales.slice(0, end);
     sales = cleanUpInt(sales);
-    console.log("Sales ranking for url_id " + url.url_id + ": " + sales);
     var time = new Date();
     db.addRanking({url_id: url.url_id, ranking: sales, date: time});
   }
@@ -63,7 +62,6 @@ setInterval(getCurrentRankings, 3600000);
  // GET home page. 
 router.get('/', 
   function(req, res) {
-    console.log("rendering index");
     res.render('index', { title: 'LitTracker' });
   }
 );
@@ -73,15 +71,18 @@ router.get('/books/:id',
   function(req, res) {
     db.getRankingsByBook({book_id: req.params['id']}, function(rankings) {
       res.send({ rankings: JSON.stringify(rankings) });
-    })
+    });
   }
 );
 
 // POST a new url to track
 router.get('/books/:id/urls/new',
   function(req, res) {
+    var errorHandler = errorHandler.bind(res);
     db.addBookURL({book_id: req.params['id'], url: req.body.url, edition: req.body.edition}, function(r) {
       res.send({ status: 200 });
+    }, function(status, err) {
+      res.status(status).send(err);
     });
   })
 
@@ -90,7 +91,7 @@ router.get('/books',
   function(req, res) {
     db.getAllBooks(function(books) {
       res.send({ books: JSON.stringify(books) });
-    })
+    });
   }
 );
 
@@ -105,8 +106,12 @@ router.post('/books/new',
         res.send({ 
           status: 200,
           book: JSON.stringify(r[0])
-        })
-      })
+        });
+      }, function(status, err) {
+        res.status(status).send(err);
+      });
+    }, function(status, err) {
+      res.status(status).send(err);
     });
   }
 );
