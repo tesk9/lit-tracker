@@ -102,13 +102,17 @@ module.exports = function() {
   }
 
   var addBookURL = function(params, callback) {
-    if(!params.book_id || !params.url) { return; }
-    var queryString = ['INSERT INTO urls(book_id, url, edition)',
-                       'VALUES($1, $2, $3)',
-                       'RETURNING *',
-                       ';'].join(" ")
-    dbQuery(callback, queryString, [params.book_id, params.url, params.edition]);
-  }
+    if(!params.book_id || !params.url) { 
+      throw new Error("Missing book or url");
+    }
+    if(/^https:\/\/www.amazon.com/.test(params.url) || /^http:\/\/www.amazon.com/.test(params.url)) {
+      var queryString = ['INSERT INTO urls(book_id, url, edition)',
+                         'VALUES($1, $2, $3)',
+                         'RETURNING *',
+                         ';'].join(" ")
+      dbQuery(callback, queryString, [params.book_id, params.url, params.edition]);
+    }
+  };
 
   var getBookURLs = function(params, callback) {
     if (params.book_id) {
