@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var jade = require('jade');
 var routes = require('./routes/index');
+var amazonScraper = require('./scrapers/amazon.js');
 
 var app = express();
 
