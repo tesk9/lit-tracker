@@ -53,14 +53,17 @@ describe("Books Table: ", function(done) {
       done();
     })
 
-    it("Does not add empty rows to books table", function() {
-      expect(function() {
-        db.addBook({name: "", author: "Author"}, function() {});
-      }).toThrow();
-      expect(function() {
-        db.addBook({name: "Name", author: ""}, function() {});
-      }).toThrow();
+    it("Does not add empty rows to books table", function(done) {
+      db.addBook({name: "", author: "Author"}, function() {
+        // Sucess callback should not be executed
+        expect(false).toBe(true);
+      }, function() {
+        db.addBook({name: "Name", author: ""}, function() {}, function() {
+          expect(true).toBe(true);
+          done();
+        });
+      });
     });
-
-  })
+    
+  });
 });
