@@ -40,6 +40,18 @@ xdescribe("Urls Table", function(done) {
     });
   });
 
+  it("Does not add invalid urls", function(done) {
+    db.addBookURL({book_id: book_id, url: 'http://www.amazon.co/Yes-Please-Amy-Poehler/dp/006226835X', edition: "Book"}, function(r) {
+      // Sucess callback should not be invoked
+      expect(false).toBe(true);
+      done();
+    }, function() {
+      // failure callback should be invoked
+      expect(true).toBe(true);
+      done();
+    });
+  });
+
   it("Does not add empty rows to urls table", function(done) {
     var res = db.addBookURL({book_id: book_id, url: "", edition: ""});
     expect(res).toEqual(undefined);

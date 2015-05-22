@@ -102,7 +102,7 @@ module.exports = function() {
         callback();
       }
     }, queryString, [params.name, params.author]);
-  }
+  };
 
   var addBookURL = function(params, callback, failure) {
     if(!params.book_id || !params.url) { 
@@ -152,7 +152,7 @@ module.exports = function() {
     } else {
       failure(400, 'desired book_id must be specified');
     }
-  }
+  };
 
   return {
     addBook : addBook,
