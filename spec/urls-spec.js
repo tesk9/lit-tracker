@@ -53,8 +53,14 @@ xdescribe("Urls Table", function(done) {
   });
 
   it("Does not add empty rows to urls table", function(done) {
-    var res = db.addBookURL({book_id: book_id, url: "", edition: ""});
-    expect(res).toEqual(undefined);
-    done();
+    db.addBookURL({book_id: book_id, url: "", edition: ""}, function() {
+      // Sucess callback should not be invoked
+      expect(false).toBe(true);
+      done();
+    }, function() {
+      // failure callback should be invoked
+      expect(true).toBe(true);
+      done();
+    });
   });
 });
