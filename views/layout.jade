@@ -7,10 +7,8 @@ html
       script(src="javascripts/bower_components/jquery/dist/jquery.min.js")
       script(src="javascripts/bower_components/d3/d3.min.js")
       script(src="javascripts/bower_components/underscore/underscore-min.js")
-  body
+  body(ng-app="littracker")
+    script(src="javascripts/bower_components/angular/angular.min.js")
+    script(src="javascripts/bower_components/angular-ui-router/release/angular-ui-router.min.js")
     block content
-    script(src="javascripts/model.js")
-    script(src="javascripts/view.js")
-    script(src="javascripts/grapher.js")
-    script(src="javascripts/form.js")
-    script(src="javascripts/controller.js")
+    script(src="javascripts/app.js")

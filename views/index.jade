@@ -15,11 +15,11 @@ block content
         #bs-example-navbar-collapse-2.collapse.navbar-collapse
           ul.nav.navbar-nav
             li.active
-              a(href='#')
+              a(href='#' ui-sref="rankings")
                 | My Books
                 span.sr-only (current)                     
             li
-              a(href='#') About LitTracker                                      
+              a(href='#' ui-sref="about-littracker") About                                     
           form.navbar-form.navbar-left(role='search')
             .form-group
               input.form-control(type='text', placeholder='Find a Book')                      
@@ -27,15 +27,4 @@ block content
           ul.nav.navbar-nav.navbar-right
             li
               a(href='#') Sign Up
-          ul.nav.navbar-nav.navbar-right
-            li
-              a(href='#') Log In
-  div.main
-  div.svgHolder
-  div.container#formHolder
-    span Add a book to tracking: 
-    input#new-book-name(type='text' placeholder='Title')
-    input#new-book-author(type='text' placeholder='Author')
-    input#new-book-url(type='text' placeholder='Amazon URL')
-    input#new-url-desc(type='text' placeholder='Edition')
-    input#submit(type='button' value='Add Book')
+  div.main(ui-view)
