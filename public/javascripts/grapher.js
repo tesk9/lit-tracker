@@ -48,11 +48,11 @@ var Grapher = (function() {
     // If none of the editions are selected, avoid D3 path error by
     //   setting first range to default range
     if(allRanges.length == 0) {
-      allRanges = [ranges[0].range[0], ranges[1].range[1]];
+      allRanges = [ranges[0].range[0], ranges[0].range[1]];
     }
 
     var yLow = Math.min.apply(null, allRanges);
-    var yHigh = Math.max.apply(null, allRanges);
+    var yHigh = Math.max.apply(null, allRanges) + 1;
     return [yLow, yHigh];
   }
 
