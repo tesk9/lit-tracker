@@ -11,22 +11,22 @@ block content
             span.icon-bar                  
             span.icon-bar                      
             span.icon-bar                 
-          a.navbar-brand(href='#')= title                  
+          a.navbar-brand(href='#' ui-sref-active="active")= title            
         #bs-example-navbar-collapse-2.collapse.navbar-collapse
           ul.nav.navbar-nav
-            li.active
+            li(ui-sref-active="active")
               a(href='#' ui-sref="rankings")
                 | My Books
                 span.sr-only (current)
-            li
+            li(ui-sref-active="active")
               a(href="#" ui-sref="add") Add Book
           form.navbar-form.navbar-left(role='search')
             .form-group
               input.form-control(type='text', placeholder='Find a Book')                      
             button.btn.btn-default(type='submit') Search               
           ul.nav.navbar-nav.navbar-right
-            li
+            li(ui-sref-active="active")
               a(href='#' ui-sref="about-littracker") About                                     
-            li
+            li(ui-sref-active="active")
               a(href='#') Sign Up
   div.main(ui-view)
