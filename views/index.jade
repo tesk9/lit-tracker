@@ -17,14 +17,16 @@ block content
             li.active
               a(href='#' ui-sref="rankings")
                 | My Books
-                span.sr-only (current)                     
+                span.sr-only (current)
             li
-              a(href='#' ui-sref="about-littracker") About                                     
+              a(href="#" ui-sref="add") Add Book
           form.navbar-form.navbar-left(role='search')
             .form-group
               input.form-control(type='text', placeholder='Find a Book')                      
             button.btn.btn-default(type='submit') Search               
           ul.nav.navbar-nav.navbar-right
+            li
+              a(href='#' ui-sref="about-littracker") About                                     
             li
               a(href='#') Sign Up
   div.main(ui-view)

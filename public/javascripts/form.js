@@ -36,8 +36,7 @@ var addBook = function() {
           },
     success: function(r) {
       var data = JSON.parse(r.book);
-      console.log("Post Book Status: " + r.status)
-      $("#formHolder").prepend("<p>"+data.name+" by "+data.author+" has been added.</p>")
+      $("#form-submit-message").html("<span>"+data.name+" by "+data.author+" has been added.</span>")
       $("#new-book-name").val("");
       $("#new-book-author").val("");
       $("#new-book-url").val("");
@@ -48,6 +47,5 @@ var addBook = function() {
 };
 
 var errMessage = function(err) {
-  $("#formHolder").find("span:nth-of-type(2)").remove();
-  $("#formHolder").append("<span class='text-error'> "+err+"</span>");
+  $("#form-submit-message").html("<span class='text-error'> "+err+"</span>");
 };

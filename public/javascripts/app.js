@@ -11,4 +11,8 @@ var App = angular.module('littracker', ['ui.router'])
         url: '/about',
         templateUrl: '../partials/about-littracker.html'
       })
+      .state('add', {
+        url: '/new',
+        templateUrl: '../partials/add-book-form.html'
+      })
   })
