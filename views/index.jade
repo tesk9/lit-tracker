@@ -1,16 +1,16 @@
 extends layout
 
 block content
-  .bs-docs-section.clearfix            
+  .bs-docs-section.clearfix
   .bs-component
     nav.navbar.navbar-inverse
       .container-fluid
         .navbar-header
           button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#bs-example-navbar-collapse-2')
-            span.sr-only Toggle navigation                     
-            span.icon-bar                  
-            span.icon-bar                      
-            span.icon-bar                 
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
           a.navbar-brand(href='#' ui-sref-active="active")= title            
         #bs-example-navbar-collapse-2.collapse.navbar-collapse
           ul.nav.navbar-nav
@@ -22,11 +22,11 @@ block content
               a(href="#" ui-sref="add") Add Book
           form.navbar-form.navbar-left(role='search')
             .form-group
-              input.form-control(type='text', placeholder='Find a Book')                      
-            button.btn.btn-default(type='submit') Search               
+              input.form-control(type='text', placeholder='Find a Book')
+            button.btn.btn-default(type='submit') Search
           ul.nav.navbar-nav.navbar-right
             li(ui-sref-active="active")
-              a(href='#' ui-sref="about-littracker") About                                     
+              a(href='#' ui-sref="about-littracker") About
             li(ui-sref-active="active")
               a(href='#') Sign Up
   div.main(ui-view)
