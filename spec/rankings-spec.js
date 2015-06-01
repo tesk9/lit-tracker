@@ -1,12 +1,13 @@
+var schema = require("../db/tableSchema.js");
 var db = require("../db/bookRankings.js");
 
 beforeEach(function(done) {
-  db.dropTables(function() {
-    db.createTables(function() {
+  schema.dropTables(function() {
+    schema.createTables(function() {
       done();
     });
   });
-})
+});
 
 describe("Rankings Table", function() {
   var book_id, url1;

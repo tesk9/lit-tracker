@@ -1,8 +1,9 @@
 var db = require('../db/bookRankings.js');
+var schema = require('../db/tableSchema.js');
 
 beforeEach(function(done) {
-  db.dropTables(function() {
-    db.createTables(function() {
+  schema.dropTables(function() {
+    schema.createTables(function() {
       done();
     });
   });
