@@ -1,28 +1,11 @@
-var http = require('http');
 var $ = require('jquery')(require('jsdom').jsdom().parentWindow);
 var db = require('../db/bookRankings.js');
+var download = require('../utils/utils.js');
 
 module.exports = (function() {
   // Standardize number format
   var cleanUpInt = function(numStr) {
     return numStr.replace(/\,/g, '');
-  };
-
-  // Helper function for scraper
-  var download = function(url, callback) {
-    http.get(url, function(res) {
-    // console.log("Got response: " + res.statusCode);
-    var data = "";
-    res.on("data", function(chunk) {
-        data += chunk;
-      });
-
-      res.on("end", function() {
-        callback(data);
-      });
-    }).on("error", function(e) {
-      console.log("Error: " + e.message);
-    });
   };
 
   // Amazon Scraper
@@ -55,5 +38,9 @@ module.exports = (function() {
     }
   };
 
-  setInterval(getCurrentRankings, 200000);
+  setInterval(getCurrentRankings, 2000);
+
+  return {
+    scrape: scrape
+  };
 })();
