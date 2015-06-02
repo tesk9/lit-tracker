@@ -34,23 +34,23 @@ router.get('/books', function(req, res) {
 });
 
 // POST a new book to track
-router.post('/books/new', function(req, res) {
-  db.addBook({name: req.body.name, author: req.body.author}, function(r) {
-    db.addBookURL({book_id: r[0].book_id, url: req.body.url, edition: req.body.edition}, function(response) {
-      download(req.body.url, function(data) {
-        amazon.scrape(response[0], data);
-      });
-      res.send({ 
-        status: 200,
-        book: JSON.stringify(r[0])
-      });
-    }, function(status, err) {
-      res.status(status).send(err);
-    });
-  }, function(status, err) {
-    res.status(status).send(err);
-  });
-});
+// router.post('/books/new', function(req, res) {
+//   db.addBook({name: req.body.name, author: req.body.author}, function(r) {
+//     db.addBookURL({book_id: r[0].book_id, url: req.body.url, edition: req.body.edition}, function(response) {
+//       download(req.body.url, function(data) {
+//         amazon.scrape(response[0], data);
+//       });
+//       res.send({ 
+//         status: 200,
+//         book: JSON.stringify(r[0])
+//       });
+//     }, function(status, err) {
+//       res.status(status).send(err);
+//     });
+//   }, function(status, err) {
+//     res.status(status).send(err);
+//   });
+// });
 
 
 module.exports = router;

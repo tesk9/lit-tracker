@@ -11,7 +11,7 @@ block content
             span.icon-bar
             span.icon-bar
             span.icon-bar
-          a.navbar-brand(href='#' ui-sref-active="active")= title            
+          a.navbar-brand(href='#' ui-sref-active="active" ui-sref="rankings")= title            
         #bs-example-navbar-collapse-2.collapse.navbar-collapse
           ul.nav.navbar-nav
             li(ui-sref-active="active")
@@ -23,10 +23,10 @@ block content
           form.navbar-form.navbar-left(role='search')
             .form-group
               input.form-control(type='text', placeholder='Find a Book')
-            button.btn.btn-default(type='submit') Search
+            button.btn.btn-default(type='submit' ui-sref="search") Search
           ul.nav.navbar-nav.navbar-right
             li(ui-sref-active="active")
               a(href='#' ui-sref="about-littracker") About
             li(ui-sref-active="active")
-              a(href='#') Sign Up
+              a(href='#' ui-sref="signup") Sign Up
   div.main(ui-view)

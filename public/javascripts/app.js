@@ -15,4 +15,12 @@ var App = angular.module('littracker', ['ui.router'])
         url: '/new',
         templateUrl: '../partials/add-book-form.html'
       })
+      .state('search', {
+        url: '/search',
+        templateUrl: '../partials/search.html'
+      })
+      .state('signup', {
+        url: '/signup',
+        templateUrl: '../partials/signup.html'
+      })
   })
