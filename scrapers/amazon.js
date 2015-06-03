@@ -38,7 +38,7 @@ module.exports = (function() {
     }
   };
 
-  setInterval(getCurrentRankings, 20000);
+  setInterval(getCurrentRankings, 200000);
 
   return {
     scrape: scrape
