@@ -1,10 +1,13 @@
-<div class="svgHolder" ng-controller="graphController">
-  <section ng-repeat="book in books | filter:book.name">
-    <div class='container' id='visualization{{ book.book_id }}'>
-      <div class='text-center'>
-        <h3><em><strong>{{ book.name }}</strong></em> by {{ book.author }}</h3>
+<div ng-controller="graphController">
+  <div>Search Results for {{ filter }}:</div>
+  <div class="svgHolder">
+    <section ng-repeat="book in books | filter: filter">
+      <div class='container' id='visualization{{ book.book_id }}'>
+        <div class='text-center'>
+          <h3><em><strong>{{ book.name }}</strong></em> by {{ book.author }}</h3>
+          </div>
         </div>
-      </div>
-    <br><hr><br>
-  </section>
+      <br><hr><br>
+    </section>
+  </div>
 </div>

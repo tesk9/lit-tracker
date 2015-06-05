@@ -1,4 +1,4 @@
-App.controller("graphController", ["$scope", "$q", function($scope, $q) {
+App.controller("graphController", ["$scope", "$q", "searchTerm", function($scope, $q, searchTerm) {
   //TODO: Query.getAllBooks should return a promise
   $q(Query.getAllBooks()).then(function(books) {
     $scope.books = books;
@@ -8,9 +8,9 @@ App.controller("graphController", ["$scope", "$q", function($scope, $q) {
         View.callGraph(data, bookID);
       });
     });
-    
   });
-}]);
 
+  $scope.filter = searchTerm.filter;
+}]);
 
 

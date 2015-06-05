@@ -1,4 +1,4 @@
-<nav class="navbar navbar-inverse">
+<nav class="navbar navbar-inverse" ng-controller="navbar">
   <div class="container-fluid">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2">
@@ -16,9 +16,9 @@
       </ul>
       <form class="navbar-form navbar-left" role="search">
         <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search">
+          <input type="text" class="form-control" placeholder="Search" ng-model="search">
         </div>
-        <button type="submit" class="btn btn-default">Find Book</button>
+        <button type="submit" class="btn btn-default" ui-sref="search">Find Book</button>
       </form>
       <ul class="nav navbar-nav navbar-right">
         <li ui-sref-active="active">
