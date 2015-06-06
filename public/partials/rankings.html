@@ -1,6 +1,10 @@
-<div class="svgHolder">
-  <script type="text/javascript" src="javascripts/model.js"></script>
-  <script type="text/javascript" src="javascripts/view.js"></script>
-  <script type="text/javascript" src="javascripts/grapher.js"></script>
-  <script type="text/javascript" src="javascripts/controller.js"></script>
+<div class="svgHolder" ng-controller="graphController">
+  <section ng-repeat="book in books">
+    <div class='container' id='visualization{{ book.book_id }}'>
+      <div class='text-center'>
+        <h3><em><strong>{{ book.name }}</strong></em> by {{ book.author }}</h3>
+        </div>
+      </div>
+    <br><hr><br>
+  </section>
 </div>

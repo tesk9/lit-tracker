@@ -1,1 +1,13 @@
-<h1>Not set up yet. Sorry! Check back again soon.</h1>
+<div ng-controller="graphController">
+  <div>Search Results for {{ filter }}:</div>
+  <div class="svgHolder">
+    <section ng-repeat="book in books | filter: filter">
+      <div class='container' id='visualization{{ book.book_id }}'>
+        <div class='text-center'>
+          <h3><em><strong>{{ book.name }}</strong></em> by {{ book.author }}</h3>
+          </div>
+        </div>
+      <br><hr><br>
+    </section>
+  </div>
+</div>
