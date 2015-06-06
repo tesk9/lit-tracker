@@ -3,6 +3,10 @@ var router = express.Router();
 var db = require('../db/bookRankings.js');
 var download = require('../utils/utils.js');
 var amazon = require('../scrapers/amazon.js');
+var passport = require('passport');
+var facebookStrategy = require('passport-facebook').Strategy;
+var locals = require('../locals.js');
+
 
  // GET home page. 
 router.get('/', function(req, res) {
@@ -15,6 +19,18 @@ router.get('/books/:id', function(req, res) {
     res.send({ rankings: JSON.stringify(rankings) });
   });
 });
+
+router.get('/auth/facebook', passport.authenticate('facebook'));
+router.get('/auth/facebook/callback', passport.authenticate('facebook', {
+  successRedirect: '/#/rankings',
+  failureRedirect: '/'
+}));
+
+passport.use(new facebookStrategy(locals, function(accessToken, refreshToken, profile, done) {
+  console.log("Logged in!");
+  console.log(profile);
+  done();
+}));
 
 // POST a new url to track
 router.get('/books/:id/urls/new', function(req, res) {
