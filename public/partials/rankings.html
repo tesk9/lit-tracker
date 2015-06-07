@@ -3,6 +3,11 @@
     <div class='container' id='visualization{{ book.book_id }}'>
       <div class='text-center'>
         <h3><em><strong>{{ book.name }}</strong></em> by {{ book.author }}</h3>
+        <form ng-submit="addEditionURL(book)">
+          <input type="text" placeholder="New Edition URL" ng-model="book.url"></input>
+          <input type="text" placeholder="Edition" ng-model="book.edition"></input>
+          <button type="submit">Add an edition</button>
+        </form>
         </div>
       </div>
     <br><hr><br>

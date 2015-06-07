@@ -15,6 +15,16 @@ App.factory("queries", ["$q", function($q) {
           callback(data, book.book_id)
         }
       });
+    },
+    addEdition: function(book, callback) {
+      $.ajax({
+        method: "POST",
+        url: "/books/" + book.book_id + "/urls/new",
+        data: book,
+        success: function(data) {
+          callback(data);
+        }
+      });
     }
   };
 }]);

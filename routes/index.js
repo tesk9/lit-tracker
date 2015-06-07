@@ -38,8 +38,7 @@ passport.use(new facebookStrategy({
 }));
 
 // POST a new url to track
-router.get('/books/:id/urls/new', function(req, res) {
-  var errorHandler = errorHandler.bind(res);
+router.post('/books/:id/urls/new', function(req, res) {
   db.addBookURL({book_id: req.params['id'], url: req.body.url, edition: req.body.edition}, function(r) {
     res.send({ status: 200 });
   }, function(status, err) {
