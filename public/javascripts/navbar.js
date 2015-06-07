@@ -1,8 +1,7 @@
 App.controller("navbar", ["$scope", "searchTerm", function($scope, searchTerm) {
-  $scope.$watch('[search]',function() {
+  $scope.$watch('[search]', function() {
     searchTerm.set($scope.search);
   }, true);
-
 }])
 .factory("searchTerm", function() {
   return {
