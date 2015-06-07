@@ -1,37 +1,21 @@
-var Query = (function() {
-  // var getAllBooks = function(callback) {
-  //   $.get('/books', function(books) {
-  //     var books = JSON.parse(books.books);
-  //     books.forEach(function(v) {
-  //       if(callback) { 
-  //         callback(v);
-  //       }
-  //     })
-  //   })
-  // }
-
-  var getAllBooks = function(callback) {
-    return function(resolve, reject) {
-      $.get('/books', function(books) {
-        var books = JSON.parse(books.books);
-        resolve(books);
-      });
-    };
-  };
-
-  var getBookRankings = function(book, callback) {
-    $.get('/books/' + book.book_id, function(data) {
-      var data = JSON.parse(data.rankings);
-      if(callback) {
-        callback(data, book.book_id)
-      }
-    });
-  }
-
+App.factory("queries", ["$q", function($q) {
   return {
-    getAllBooks: getAllBooks,
-    getBookRankings: getBookRankings
+    getAllBooks: function(callback) {
+      return $q(function(resolve, reject) {
+        $.get('/books', function(books) {
+          var books = JSON.parse(books.books);
+          resolve(books);
+        });
+      });
+    },
+    getBookRankings: function(book, callback) {
+      $.get('/books/' + book.book_id, function(data) {
+        var data = JSON.parse(data.rankings);
+        if(callback) {
+          callback(data, book.book_id)
+        }
+      });
+    }
   };
-  
-})();
+}]);
 
