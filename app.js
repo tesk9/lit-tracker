@@ -8,7 +8,6 @@ var jade = require('jade');
 var routes = require('./routes/index');
 var passport = require('passport');
 var session = require('express-session');
-
 var app = express();
 
 // view engine setup
@@ -46,7 +45,7 @@ app.use(function(req, res, next) {
 });
 
 // ERROR HANDLERS: 
-
+ 
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {

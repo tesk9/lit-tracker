@@ -19,8 +19,4 @@ var App = angular.module('littracker', ['ui.router'])
         url: '/search',
         templateUrl: '../partials/search.html'
       })
-      .state('signup', {
-        url: '/signup',
-        templateUrl: '../partials/signup.html'
-      })
-  })
+  });

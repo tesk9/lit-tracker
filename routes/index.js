@@ -5,8 +5,11 @@ var download = require('../utils/utils.js');
 var amazon = require('../scrapers/amazon.js');
 var passport = require('passport');
 var facebookStrategy = require('passport-facebook').Strategy;
-var locals = require('../locals.js');
-
+try {
+  require('../locals.js');
+} catch(err) {
+  console.log(err);
+}
 
  // GET home page. 
 router.get('/', function(req, res) {
@@ -26,9 +29,11 @@ router.get('/auth/facebook/callback', passport.authenticate('facebook', {
   failureRedirect: '/'
 }));
 
-passport.use(new facebookStrategy(locals, function(accessToken, refreshToken, profile, done) {
-  console.log("Logged in!");
-  console.log(profile);
+passport.use(new facebookStrategy({
+  clientID: process.env.FACEBOOK_ID || 'facebook_id',
+  clientSecret: process.env.FACEBOOK_SECRET || 'facebook_secret',
+  callbackURL: "/auth/facebook/callback"
+}, function(accessToken, refreshToken, profile, done) {
   done();
 }));
 
