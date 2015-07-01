@@ -2,9 +2,9 @@
   <section ng-repeat="book in books">
     <div class='container' id='visualization{{ book.book_id }}'>
       <div class='text-center'>
-        <h3><em><strong>{{ book.name }}</strong></em> by {{ book.author }}</h3>
+        <h3 ng-click="addNewEdition = !addNewEdition"><em><strong>{{ book.name }}</strong></em> by {{ book.author }}</h3>
         </div>
-        <form ng-submit="addEditionURL(book)">
+        <form ng-show="addNewEdition" ng-submit="addEditionURL(book)">
           <div class="form-group">
             <label for="url{{ book.book_id }}">New URL: </label>
             <input type="text" id="url{{ book.book_id }}" placeholder="New Edition URL" ng-model="book.url"></input>
