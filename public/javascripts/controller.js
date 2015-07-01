@@ -10,14 +10,10 @@ App.controller("graphController", ["$scope", "queries", "searchTerm", "grapher",
   });
 
   $scope.addEditionURL = function(book) {
-    console.log(book)
-    console.log($scope.books)
     if(book.url && book.edition && book.url.match(/^http:\/\/www.amazon.com\//)) {
       queries.addEdition(book, function() {
-        console.log("SUBMITTED");
+        
       });
-    } else {
-      console.log("NOT right format")
     }
   };
 
